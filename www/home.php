@@ -7,7 +7,7 @@
 
     <title>Clinică medicală</title>
 
-    <link rel="stylesheet" type="text/css" href="./style/style.css">
+    <link rel="stylesheet" type="text/css" href=".style/style.css">
     <link rel="icon" href="./assets/favicon/favicon.ico" type="image/x-icon">
 
     <!-- Bootstrap 5 CSS -->
@@ -21,9 +21,18 @@
 
   </head>
   <body>
-    <?php include 'navbar.php';?>
+    <?php 
+    session_start();
+    $active = 1;
+    include './navbar.php';
+    if (isset($_SESSION['loggedin']) && $_SESSION['loggedin'] == true) {
+      echo "Welcome to the member's area, " . htmlspecialchars($_SESSION['username']) . "!";
+    } else {
+      echo "Please log in first to see this page.";
+    }
+    ?>
 
-    <div class="container">
+    <div class="container mt-4">
       Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur sagittis vulputate urna non placerat. Mauris mollis egestas risus id iaculis. Vestibulum id tellus mollis, scelerisque lectus a, consequat augue. Vestibulum eleifend diam faucibus nisi consectetur vehicula. Donec vitae neque sed nibh blandit ornare. Sed a imperdiet quam, ut posuere ex. Interdum et malesuada fames ac ante ipsum primis in faucibus. Phasellus laoreet diam a tincidunt malesuada. Vestibulum at dignissim purus, quis ultricies urna.
 
       Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Nullam nisl libero, sodales eget erat vel, molestie aliquam metus. Donec cursus cursus eros vel suscipit. Interdum et malesuada fames ac ante ipsum primis in faucibus. Phasellus porta placerat enim, quis tincidunt metus sollicitudin sed. Donec ultricies arcu ut diam porttitor tempor. Sed a eros ac ante cursus tincidunt. Quisque pretium quis neque quis venenatis. Etiam efficitur mauris leo, sit amet tincidunt urna ullamcorper in. Phasellus at sem et purus pharetra fermentum sit amet at purus. Fusce vulputate lacus nec quam commodo congue.
@@ -56,6 +65,6 @@
 
     </div>
     
-    <script src="script.js"></script>
+    <script src=".script/script.js"></script>
   </body>
 </html>
