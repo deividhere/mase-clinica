@@ -21,80 +21,7 @@
 
   </head>
   <body>
-    <nav class="navbar navbar-expand-md navbar-dark bg-dark">
-
-      <div class="container">
-        <a
-          href="#"
-          class="navbar-brand mb-0 h1 link-light">
-          <img class="d-inline-block align-top mr-1"
-            src="./assets/hospital.png"
-            width="25" height="25"
-          />
-          Clinică
-        </a>
-      
-        <div class="row nav navbar-right ml-auto">
-          <div class="col">
-            <button type="button" class="navbar-btn btn btn-light"
-              style="width: fit-content;">
-              <i class="fa fa-user"></i>
-            </button>
-          </div>
-          <div class="col">
-            <button type="button"
-              data-bs-toggle="collapse"
-              data-bs-target="#navbarNav"
-              class="navbar-toggler"
-              aria-controls="navbarNav"
-              aria-expanded="false"
-              aria-label="Meniu"
-              style="width: fit-content; margin-right: 0;">
-              <span class="navbar-toggler-icon"></span>
-            </button>
-          </div>
-        </div>
-
-        <div class="collapse navbar-collapse"
-          id="navbarNav">
-
-          <ul class="navbar-nav">
-            <!-- Acasa -->
-            <li class="navbar-item active">
-              <a href="#" class="nav-link link-light">
-                Acasă
-              </a>
-            </li>
-            
-            <!-- Medici -->
-            <li class="navbar-item">
-              <a href="#" class="nav-link link-light">
-                Medici
-              </a>
-            </li>
-            
-            <!-- Medicamente -->
-            <li class="navbar-item">
-              <a href="#" class="nav-link link-light">
-                Medicamente
-              </a>
-            </li>
-
-            <!-- Dummy -->
-            <!--
-            <li class="navbar-item">
-              <a href="#" class="nav-link link-light">
-
-              </a>
-            </li>
-            -->
-          </ul>
-
-        </div>
-
-      </div>
-
-    </nav>
+    <?php include 'navbar.php';?>
 
     <div class="container">
       Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur sagittis vulputate urna non placerat. Mauris mollis egestas risus id iaculis. Vestibulum id tellus mollis, scelerisque lectus a, consequat augue. Vestibulum eleifend diam faucibus nisi consectetur vehicula. Donec vitae neque sed nibh blandit ornare. Sed a imperdiet quam, ut posuere ex. Interdum et malesuada fames ac ante ipsum primis in faucibus. Phasellus laoreet diam a tincidunt malesuada. Vestibulum at dignissim purus, quis ultricies urna.
@@ -129,6 +56,6 @@
 
     </div>
     
-	  <script src="script.js"></script>
+    <script src="script.js"></script>
   </body>
 </html>
