@@ -7,7 +7,7 @@
 
     <title>Clinică medicală</title>
 
-    <link rel="stylesheet" type="text/css" href=".style/style.css">
+    <link rel="stylesheet" type="text/css" href="./style/style.css">
     <link rel="icon" href="./assets/favicon/favicon.ico" type="image/x-icon">
 
     <!-- Bootstrap 5 CSS -->
@@ -65,6 +65,6 @@
 
     </div>
     
-    <script src=".script/script.js"></script>
+    <script src="./script/script.js"></script>
   </body>
 </html>
