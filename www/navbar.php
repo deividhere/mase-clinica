@@ -74,7 +74,7 @@
                     </div>
 
                     <div class="mt-4">
-                        <button type="submit" class="btn btn-success btn-block" style="background-color: #5cb85c; border-color: #5cb85c;"><i class="fa fa-sign-in"></i> Autentificare</button>
+                        <button type="submit" class="btn btn-success btn-block" style="background-color: #5cb85c; border-color: #5cb85c;"> Autentificare</button>
                     </div>
 
                 </form>

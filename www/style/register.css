@@ -1,10 +1,29 @@
+:root {
+    --good-color: #66cc66;
+    --dim-good-color: #91ea91;
+    --bad-color: #ff6666;
+    --dim-bad-color: #fe9d9d;
+}
 
 legend {
    color: #678;
 }
+
 .form-control {
     width: 95%;
 }
+
 label small {
     color: #678 !important;
 }
+
+input.highlight, .highlight {
+    border: 2px solid var(--bad-color);
+
+    -webkit-transition: border 0.5s ease-in-out;
+    -moz-transition: border 0.5s ease-in-out;
+    -o-transition: border 0.5s ease-in-out;
+    transition: border 0.5s ease-in-out;
+}
+
+.slow .toggle-group { transition: left 0.7s; -webkit-transition: left 0.7s; }
