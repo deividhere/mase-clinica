@@ -64,27 +64,130 @@
         //   echo "Nu";
         // }
 
-        Initialize SQL fields
+        // Initialize SQL fields
         $servername = "localhost";
         $username = "root";
         $password = "";
+        $database = "clinica";
 
         // Create connection
-        $conn = new mysqli($servername, $username, $password);
+        mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
+        $mysqli = new mysqli($servername, $username, $password, $database);
 
         // Check connection
-        if ($conn->connect_error) {
-          die("Conectarea la baza de date a eșuat: " . $conn->connect_error);
+        if ($mysqli->connect_error) {
+          die("Conectarea la baza de date a eșuat: " . $mysqli->connect_error);
         }
         
-        $data = [
-          'name' => $name,
-          'surname' => $surname,
-          'sex' => $sex,
-        ];
-        $sql = "INSERT INTO users (name, surname, sex) VALUES (:name, :surname, :sex)";
-        $stmt= $pdo->prepare($sql);
-        $stmt->execute($data);
+        if (strlen($_POST["email"]) > 0) {
+          $sql = "SELECT idpacient FROM pacienti WHERE email = ?";
+          $stmt = $mysqli->prepare($sql);
+
+          $stmt->bind_param("s", $_POST["email"]);
+          $stmt->execute();
+
+          $result = $stmt->get_result();
+
+          if ($result->num_rows > 0) {
+            echo "Există deja un <b>pacient</b> cu această adresă de e-mail.";
+          }
+          else {
+            $stmt->close();
+
+            $sql = "SELECT idmedic FROM medici WHERE email = '?'";
+            $stmt = $mysqli->prepare($sql);
+            $stmt->bind_param("s", $_POST["email"]);
+
+            $stmt->execute();
+
+            $result = $stmt->get_result();
+
+            if ($result->num_rows > 0) {
+              echo "Există deja un <b>medic</b> cu această adresă de e-mail.";
+            }
+            else {
+              $stmt->close();
+
+              // patient account
+              if ($_POST["account"] == 0) {
+
+                // check password fields again
+                if (strcmp($_POST["pass1"], $_POST["pass2"]) == 0 &&
+                    strlen($_POST["pass1"]) > 0 && 
+                    strlen($_POST["pass2"]) > 0) {
+                  
+                  $nume = $_POST["firstname"];
+                  $prenume = $_POST["lastname"];
+                  $cnp = $_POST["cnp"];
+                  $sex = "Masculin";
+                  if ($_POST["sex"] == 0) {
+                    $sex = "Masculin";
+                  }
+                  else if ($_POST["sex"] == 1) {
+                    $sex = "Feminin";
+                  }
+                  else {
+                    $sex = "Altul";
+                  }
+                  $telefon = $_POST["telefon"];
+                  $email = $_POST["email"];
+                  $parola = password_hash($_POST["pass1"], PASSWORD_DEFAULT);
+                  $data_nastere = date('Y-m-d', strtotime($_POST["dataNastere"]));
+                  $asigurare = $_POST["asigurare"];
+                  
+                  // Check if the hash of the entered login password, matches the stored hash.
+                  // The salt and the cost factor will be extracted from $existingHashFromDb.
+                  // $isPasswordCorrect = password_verify($_POST['password'], $existingHashFromDb);
+
+                  
+                  // Prepare an SQL statement with placeholders
+                  $sql = "INSERT INTO pacienti (nume, prenume, cnp, sex, telefon, email, parola, data_nastere, asigurare) 
+                          VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+
+                  // Prepare the statement
+                  $stmt = $mysqli->prepare($sql);
+
+                  // Bind parameters to the placeholders
+                  $stmt->bind_param("ssssssssi", $nume, $prenume, $cnp, $sex, $telefon, $email, $parola, $data_nastere, $asigurare);
+
+                  // $stmt->execute();
+                  if($stmt === false) {
+                      echo $mysqli->error;
+                      die();
+                  }
+                  if($stmt->execute() === false) {
+                      echo $mysqli->error;
+                      die();
+                  }
+
+                  // Check if the insertion was successful
+                  if ($stmt->affected_rows > 0) {
+                    echo "Înregistrarea a avut loc cu success.";
+                  } else {
+                    echo "Eroare la adăugarea în baza de date: " . $stmt->error;
+                  }
+
+                  // Close the statement and connection
+                  $stmt->close();
+                  $mysqli->close();
+                }
+                else {
+                  echo "Parola invalida!";
+                }
+              }
+              // medic account
+              else if ($_POST["account"] == 1) {
+
+              }
+              else {
+                echo "Eroare la trimiterea datelor.";
+              }
+            }
+          }
+        }
+        else {
+          echo "Eroare la trimiterea datelor.";
+        }
       ?>
     </div>
     
