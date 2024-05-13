@@ -44,10 +44,10 @@
                     <p>Tip cont: </p>
 
                     <div class="mt-1 d-flex justify-content-center gap-2">
-                      <input type="radio" class="btn-check me-2" name="account" id="pacient" value="0" autocomplete="off" checked>
+                      <input type="radio" class="btn-check me-2" name="account" id="pacient" value="0" autocomplete="off" checked onclick="pacientClicked();">
                       <label class="btn btn-outline-success" for="pacient">Pacient</label>
 
-                      <input type="radio" class="btn-check" name="account" id="medic" value="1" autocomplete="off">
+                      <input type="radio" class="btn-check" name="account" id="medic" value="1" autocomplete="off" onclick="medicClicked();">
                       <label class="btn btn-outline-success" for="medic">Medic</label>
                     </div>
                   </div>
@@ -77,11 +77,73 @@
                     <span id="errPass1"></span>
                     </div>
                     
-                    <div class="form-group mt-2">
+                    <div class="form-group mt-2 mb-1">
                     <label for="pass2">Repetare parolă: </label>
                     <input required name="pass2" type="password" class="form-control inputpass" minlength="8" maxlength="24" placeholder="Minimum 8 caractere"  id="pass2" onkeyup="checkSecondPass();" />
                     <span id="errPass2"></span>
+
+                  </div>
+                  <input type="checkbox" onclick="showPass()">
+                  <p class="mb-1 d-inline">Afișare parolă</p>
+                  </div>
+
+                  <div class="form-group mt-2" id="divCNP">
+                    <label for="cnp">CNP: </label> 
+                    <input class="form-control" required type="text" name="cnp" id = "cnp" inputmode="numeric" onkeyup="checkCNP();" />   
+                    <span id="errCNP"></span>
+                  </div>
+
+                  <div class="form-group mt-2" id="divSex">
+                    <p class="mb-1">Sex: </p>
+
+                    <div class="d-flex gap-2">
+                      <input type="radio" class="btn-check me-2" name="sex" id="masculin" value="0" autocomplete="off" checked>
+                      <label class="btn btn-outline-success" for="masculin">Masculin</label>
+
+                      <input type="radio" class="btn-check" name="sex" id="feminin" value="1" autocomplete="off">
+                      <label class="btn btn-outline-success" for="feminin">Feminin</label>
+
+                      <input type="radio" class="btn-check" name="sex" id="altul" value="2" autocomplete="off">
+                      <label class="btn btn-outline-success" for="altul">Altul</label>
                     </div>
+                  </div>
+
+                  <div class="form-group mt-2" id="divTelefon">
+                    <label for="telefon">Telefon: </label> 
+                    <input class="form-control" required type="text" name="telefon" id = "telefon" inputmode="numeric" onkeyup="checkTelefon();" onfocus="checkTelefon();" />   
+                    <span id="errTelefon"></span>
+                  </div>
+
+                  <div class="form-group mt-2" id="divDataNastere">
+                    <div class="mb-1">
+                      <label for="dataNastere">Data nașterii:</label>
+                    </div>
+                    <input type="date" id="dataNastere" name="dataNastere" value="2000-01-01" min="1900-01-01" max="2000-01-01" />  
+                    <span id="errDataNastere"></span>
+                  </div>
+
+                  <div class="form-group mt-2" id="divAsigurare">
+                    <p class="mb-1">Asigurare: </p>
+
+                    <div class="d-flex gap-2">
+                      <input type="radio" class="btn-check me-2" name="asigurare" id="asigurareDa" value="0" autocomplete="off" checked>
+                      <label class="btn btn-outline-success" for="asigurareDa">Nu</label>
+
+                      <input type="radio" class="btn-check" name="asigurare" id="asigurareNu" value="1" autocomplete="off">
+                      <label class="btn btn-outline-success" for="asigurareNu">Da</label>
+                    </div>
+                  </div>
+
+                  <div class="form-group mt-2" id="divSpecializare" style="display: none;">
+                    <label for="specializare">Specializare: </label> 
+                    <input class="form-control" required type="text" name="specializare" id = "specializare"  onkeyup="checkSpecializare();" onfocus="checkSpecializare();" />   
+                    <span id="errSpecializare"></span>
+                  </div>
+
+                  <div class="form-group mt-2" id="divTelefonCabinet" style="display: none;">
+                    <label for="telefonCabinet">Telefon cabinet: </label> 
+                    <input class="form-control" required type="text" name="telefonCabinet" id = "telefonCabinet" inputmode="numeric" onkeyup="checkTelefonCabinet();" onfocus="checkTelefonCabinet();" />   
+                    <span id="errTelefonCabinet"></span>
                   </div>
 
                   <div class="form-group mt-2">
@@ -97,7 +159,7 @@
                   </div>
 
                   <div class="form-group mt-4 d-flex justify-content-center">
-                    <button  type="button" data-mdb-button-init data-mdb-ripple-init class="btn btn-success btn-lg" onclick="register_click();">Înregistrare</button>
+                    <button  type="button" data-mdb-button-init data-mdb-ripple-init class="btn btn-success btn-lg" onclick="registerClicked();">Înregistrare</button>
                   </div>
 
                   </fieldset>
@@ -114,6 +176,10 @@
     document.addEventListener('DOMContentLoaded', function () {
     cookieconsent.run({"notice_banner_type":"simple","consent_type":"implied","palette":"dark","language":"ro","page_load_consent_levels":["strictly-necessary","functionality","tracking","targeting"],"notice_banner_reject_button_hide":false,"preferences_center_close_button_hide":true,"page_refresh_confirmation_buttons":false,"website_name":"david.d0.ro","website_privacy_policy_url":"http://www.david.d0.ro"});
     });
+    </script>
+    <script>
+      dataNastere.max = new Date().toISOString().split("T")[0];
+      dataNastere.value = new Date().toISOString().split("T")[0];
     </script>
   </body>
 </html>

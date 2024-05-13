@@ -31,40 +31,6 @@
 
     <div class="container mt-4">
       <?php
-        // echo "Date introduse: <br>";
-        // echo "Tip cont: " . $_POST["account"] . "<br>";
-        // echo "Prenume: " . $_POST["firstname"] . "<br>";
-        // echo "Nume: " . $_POST["lastname"] . "<br>";
-        // echo "Email: " . $_POST["email"] . "<br>";
-        // echo "Parola 1: " . $_POST["pass1"] . "<br>";
-        // echo "Parola 2: " . $_POST["pass2"] . "<br>";
-        // echo "Acceptare termeni: " . $_POST["terms"] . "<br>";
-
-        // echo "Tip cont: ";
-        // if ($_POST["account"] == 0) {
-        //   echo "Pacient <br>";
-        //   echo "CNP: " . $_POST["cnp"] ."<br>";
-        //   echo "Sex: " . $_POST["sex"] ."<br>";
-        //   echo "Telefon: " . $_POST["telefon"] ."<br>";
-        //   echo "Data nasterii: " . $_POST["dataNastere"] ."<br>";
-        //   echo "Asigurare: " . $_POST["asigurare"] ."<br>";
-        // }
-        // else if ($_POST["account"] == 1) {
-        //   echo "Medic <br>";
-        //   echo "Specializare: " . $_POST["specializare"] ."<br>";
-        //   echo "Telefon cabinet: " . $_POST["telefonCabinet"] ."<br>";
-        // }
-        
-        // // echo var_dump($_POST["terms"]);
-        // echo "Termeni si conditii acceptati? ";
-        // if ($_POST["terms"] == "on") {
-        //   echo "Da";
-        // }
-        // else {
-        //   echo "Nu";
-        // }
-
-        Initialize SQL fields
         $servername = "localhost";
         $username = "root";
         $password = "";
@@ -74,17 +40,9 @@
 
         // Check connection
         if ($conn->connect_error) {
-          die("Conectarea la baza de date a eșuat: " . $conn->connect_error);
+          die("Connection failed: " . $conn->connect_error);
         }
-        
-        $data = [
-          'name' => $name,
-          'surname' => $surname,
-          'sex' => $sex,
-        ];
-        $sql = "INSERT INTO users (name, surname, sex) VALUES (:name, :surname, :sex)";
-        $stmt= $pdo->prepare($sql);
-        $stmt->execute($data);
+        echo "Connected successfully";
       ?>
     </div>
     
