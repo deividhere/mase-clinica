@@ -9,19 +9,19 @@ function checkFirstPass() {
     if (pass1.value.length == 0) {
         pass1.style.backgroundColor = badColor;
         message1.style.color = badColor;
-        message1.innerHTML = "The password field is empty!";
+        message1.innerHTML = "Câmpul pentru parolă este gol!";
         return false;
     }
     else if (pass1.value.length < 8) {
         pass1.style.backgroundColor = badColor;
         message1.style.color = badColor;
-        message1.innerHTML = "The password must be at least 8 characters long!";
+        message1.innerHTML = "Parola trebuie să aibă cel puțin 8 caractere!";
         return false;
     }
     else {
         pass1.style.backgroundColor = goodColor;
         message1.style.color = goodColor;
-        message1.innerHTML = "The password is valid.";
+        message1.innerHTML = "Parola este validă.";
         return true;
     }
 }
@@ -35,26 +35,26 @@ function checkSecondPass() {
     if (pass2.value.length == 0) {
         pass2.style.backgroundColor = badColor;
         message2.style.color = badColor;
-        message2.innerHTML = "The password field is empty!";
+        message2.innerHTML = "Câmpul pentru parolă este gol!";
         return false;
     }
     else if (pass2.value.length < 8) {
         pass2.style.backgroundColor = badColor;
         message2.style.color = badColor;
-        message2.innerHTML = "The password must be at least 8 characters long!";
+        message2.innerHTML = "Parola trebuie să aibă cel puțin 8 caractere!";
         return false;
     }
 
     if (pass1.value != pass2.value) {
         pass2.style.backgroundColor = badColor;
         message2.style.color = badColor;
-        message2.innerHTML = "Passwords do not match!";
+        message2.innerHTML = "Parolele nu sunt la fel!";
 
         return false;
     } else {
         pass2.style.backgroundColor = goodColor;
         message2.style.color = goodColor;
-        message2.innerHTML = "Passwords Match.";
+        message2.innerHTML = "Parolele sunt la fel.";
 
         return true;
     }
@@ -67,7 +67,7 @@ function checkFirstName() {
 
     if (first.value.length == 0) {
         error.style.color = badColor;
-        error.innerHTML = "First name can't be empty.";
+        error.innerHTML = "Prenumele nu poate fi gol.";
         
         return false;
     }
@@ -87,7 +87,7 @@ function checkLastName() {
 
     if (last.value.length == 0) {
         error.style.color = badColor;
-        error.innerHTML = "Last name can't be empty.";
+        error.innerHTML = "Numele nu poate fi gol.";
 
         return false;
     }
@@ -110,14 +110,14 @@ function checkEmail() {
     if (regMail.test(email.value) == false || email.value.length == 0)
     {
         error.style.color = badColor;
-        error.innerHTML = "E-mail address is not valid.";
+        error.innerHTML = "Adresa de e-mail nu este validă.";
         return false;
     }
     else
     {
         email.classList.remove('highlight');
         error.style.color = goodColor;
-        error.innerHTML = "E-mail address is valid.";
+        error.innerHTML = "Adresa de e-mail este validă.";
         return true;
     }
 }
@@ -130,7 +130,7 @@ function checkTerms() {
     if (!terms.checked) {
         terms.classList.remove('highlight');
         error.style.color = badColor;
-        error.innerHTML = "You must agree to the terms of service.";
+        error.innerHTML = "Trebuie să fii de acord cu termenii serviciului.";
         return false;
     }
     else {
