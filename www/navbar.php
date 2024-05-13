@@ -2,7 +2,7 @@
 <html>
     <head>
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <link rel="stylesheet" type="text/css" href="style/navbar.css">
+        <link rel="stylesheet" type="text/css" href="/style/navbar.css">
 
         <!-- Bootstrap 5 CSS -->
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
@@ -21,10 +21,10 @@
 
         <!-- Navigation bar -->
         <ul class="topnav" id="myTopnav">
-            <li><div class="px-2 px-auto" style="display: flex; align-items: center; height: 52px;"><img src="assets/hospital.png" class="small"></div></li>
-            <li><a href="home" class="<?php if ($active == 1) {echo "active";}?>">Clinică</a></li>
-            <li><a href="medici" class="<?php if ($active == 2) {echo "active";}?>">Medici</a></li>
-            <li><a href="medicamente" class="<?php if ($active == 3) {echo "active";}?>">Medicamente</a></li>
+            <li><div class="px-2 px-auto" style="display: flex; align-items: center; height: 52px;"><img src="/assets/hospital.png" class="small"></div></li>
+            <li><a href="/home" class="<?php if ($active == 1) {echo "active";}?>">Clinică</a></li>
+            <li><a href="/medici" class="<?php if ($active == 2) {echo "active";}?>">Medici</a></li>
+            <li><a href="/medicamente" class="<?php if ($active == 3) {echo "active";}?>">Medicamente</a></li>
             <li class="right">
                 <?php 
                     if (isset($_SESSION['loggedin']) && $_SESSION['loggedin'] == true) {
@@ -85,7 +85,7 @@
                             <button type="submit" class="btn btn-danger btn-default" data-bs-dismiss="modal"><i class="fa fa-window-close" aria-hidden="true"></i> Anulare</button>
                         </div>
                         <div class="col-sm-auto">
-                            <p class="text-end my-0">Nu sunteți membru?</p> <p p class="text-end"><a href="register">Înregistrare</a></p>
+                            <p class="text-end my-0">Nu sunteți membru?</p> <p p class="text-end"><a href="/register">Înregistrare</a></p>
                         </div>
                     </div>
                 </div>
@@ -94,6 +94,6 @@
             </div>
         </div> 
 
-        <script src="script/navbar.js"></script>
+        <script src="/script/navbar.js"></script>
     </body>
 </html>

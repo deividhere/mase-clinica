@@ -7,9 +7,9 @@
 
     <title>Clinică medicală</title>
 
-    <link rel="stylesheet" type="text/css" href="./style/style.css">
-    <link rel="stylesheet" type="text/css" href="./style/register.css">
-    <link rel="icon" href="./assets/favicon/favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" type="text/css" href="/style/style.css">
+    <link rel="stylesheet" type="text/css" href="/style/register.css">
+    <link rel="icon" href="/assets/favicon/favicon.ico" type="image/x-icon">
 
     <!-- Bootstrap 5 CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
@@ -25,7 +25,10 @@
     <?php 
     session_start();
     $active = 9;
-    include 'navbar.php';
+    
+    $rootDir = realpath($_SERVER["DOCUMENT_ROOT"]);
+    include "$rootDir/navbar.php";
+
     ?>
 
     <div class="container mt-4">
@@ -35,7 +38,7 @@
 
                 <p class="text-center h1 fw-bold mb-5 mx-1 mx-md-4 mt-4">Înregistrare</p>
 
-                <form action="" method="post" id="fileForm" role="form">
+                <form action="/register/submit" method="post" id="fileForm" role="form">
 
                   <div class="form-group">
                     <p>Tip cont: </p>
@@ -86,7 +89,7 @@
                       <input type="checkbox" required name="terms" onchange="checkTerms();" id="terms">   
                       <label for="terms">
                         <!-- I agree with the <a href="terms.php" title="You may read our terms and conditions by clicking on this link">terms and conditions</a> for Registration. -->
-                        Sunt de acord cu <a href="./terms-of-service.php">termenii serviciului</a>.
+                        Sunt de acord cu <a href="/terms-of-service.php">termenii serviciului</a>.
                       </label>
                     </div>
 
@@ -103,8 +106,8 @@
           </div>
     </div>
     
-    <script src="./script/script.js"></script>
-    <script src="./script/register.js"></script>
+    <script src="/script/script.js"></script>
+    <script src="/script/register.js"></script>
     <!-- Cookie Consent by FreePrivacyPolicy.com https://www.FreePrivacyPolicy.com -->
     <script type="text/javascript" src="//www.freeprivacypolicy.com/public/cookie-consent/4.1.0/cookie-consent.js" charset="UTF-8"></script>
     <script type="text/javascript" charset="UTF-8">

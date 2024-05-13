@@ -7,8 +7,8 @@
 
     <title>Clinică medicală</title>
 
-    <link rel="stylesheet" type="text/css" href="./style/style.css">
-    <link rel="icon" href="./assets/favicon/favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" type="text/css" href="/style/style.css">
+    <link rel="icon" href="/assets/favicon/favicon.ico" type="image/x-icon">
 
     <!-- Bootstrap 5 CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
@@ -23,7 +23,10 @@
   <body>
     <?php 
     session_start();
-    include 'navbar.php';
+    
+    $rootDir = realpath($_SERVER["DOCUMENT_ROOT"]);
+    include "$rootDir/navbar.php";
+    
     ?>
 
     <div class="container mt-4">
@@ -59,7 +62,7 @@
 
     </div>
     
-    <script src="./script/script.js"></script>
+    <script src="/script/script.js"></script>
     <!-- Cookie Consent by FreePrivacyPolicy.com https://www.FreePrivacyPolicy.com -->
     <script type="text/javascript" src="//www.freeprivacypolicy.com/public/cookie-consent/4.1.0/cookie-consent.js" charset="UTF-8"></script>
     <script type="text/javascript" charset="UTF-8">

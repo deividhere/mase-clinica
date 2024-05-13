@@ -220,16 +220,18 @@ function register_click() {
         return;
     }
 
-    var account = document.querySelector('input[name="account"]:checked').value == 1 ? "Medic" : "Pacient" ;
+    // var account = document.querySelector('input[name="account"]:checked').value == 1 ? "Medic" : "Pacient" ;
+    // 
+    // window.alert(
+    //     "Account: " + account + " " + document.querySelector('input[name="account"]:checked').value + "\n" +
+    //     "First name: " + first.value + "\n" +
+    //     "Last name: " + last.value + "\n" +
+    //     "Email: " + email.value + "\n" +
+    //     "Pass1: " + pass1.value + "\n" +
+    //     "Pass2: " + pass2.value + "\n" +
+    //     "Terms: " + terms.value + "\n" +
+    //     "Registration successful!"
+    // );
 
-    window.alert(
-        "Account: " + account + " " + document.querySelector('input[name="account"]:checked').value + "\n" +
-        "First name: " + first.value + "\n" +
-        "Last name: " + last.value + "\n" +
-        "Email: " + email.value + "\n" +
-        "Pass1: " + pass1.value + "\n" +
-        "Pass2: " + pass2.value + "\n" +
-        "Terms: " + terms.value + "\n" +
-        "Registration successful!"
-    );
+    document.getElementById('fileForm').submit();
 }

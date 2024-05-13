@@ -7,8 +7,8 @@
 
     <title>Clinică medicală</title>
 
-    <link rel="stylesheet" type="text/css" href="./style/style.css">
-    <link rel="icon" href="./assets/favicon/favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" type="text/css" href="/style/style.css">
+    <link rel="icon" href="/assets/favicon/favicon.ico" type="image/x-icon">
 
     <!-- Bootstrap 5 CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
@@ -27,14 +27,40 @@
     $rootDir = realpath($_SERVER["DOCUMENT_ROOT"]);
     include "$rootDir/navbar.php";
     
-    $active = 9;
     ?>
 
     <div class="container mt-4">
-      Terms
+      <?php
+        echo "Date introduse: <br>";
+        echo "Tip cont: " . $_POST["account"] . "<br>";
+        echo "Prenume: " . $_POST["firstname"] . "<br>";
+        echo "Nume: " . $_POST["lastname"] . "<br>";
+        echo "Email: " . $_POST["email"] . "<br>";
+        echo "Parola 1: " . $_POST["pass1"] . "<br>";
+        echo "Parola 2: " . $_POST["pass2"] . "<br>";
+        echo "Acceptare termeni: " . $_POST["terms"] . "<br>";
+
+        echo "Tip cont: ";
+        if ($_POST["account"] == 0) {
+          echo "Pacient";
+        }
+        else if ($_POST["account"] == 1) {
+          echo "Medic";
+        }
+        echo "<br>";
+
+        echo "Termeni si conditii acceptati? ";
+        // echo var_dump($_POST["terms"]);
+        if ($_POST["terms"] == "on") {
+          echo "Da";
+        }
+        else {
+          echo "Nu";
+        }
+      ?>
     </div>
     
-    <script src="./script/script.js"></script>
+    <script src="/script/script.js"></script>
     <!-- Cookie Consent by FreePrivacyPolicy.com https://www.FreePrivacyPolicy.com -->
     <script type="text/javascript" src="//www.freeprivacypolicy.com/public/cookie-consent/4.1.0/cookie-consent.js" charset="UTF-8"></script>
     <script type="text/javascript" charset="UTF-8">
