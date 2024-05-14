@@ -24,6 +24,8 @@
     <?php 
     session_start();
     
+    $active = 9;
+    
     $rootDir = realpath($_SERVER["DOCUMENT_ROOT"]);
     include "$rootDir/navbar.php";
     
@@ -70,8 +72,13 @@
         $password = "";
         $database = "clinica";
 
-        // Create connection
+        // Display errors
+        ini_set('display_errors', '1');
+        ini_set('display_startup_errors', '1');
+        error_reporting(E_ALL);
         mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
+
+        // Create connection
         $mysqli = new mysqli($servername, $username, $password, $database);
 
         // Check connection
@@ -92,11 +99,16 @@
             echo "Există deja un <b>pacient</b> cu această adresă de e-mail.";
           }
           else {
+            $stmt->free_result();
             $stmt->close();
 
-            $sql = "SELECT idmedic FROM medici WHERE email = '?'";
+            $sql = "SELECT idmedic FROM medici WHERE email = ?";
             $stmt = $mysqli->prepare($sql);
-            $stmt->bind_param("s", $_POST["email"]);
+            if (!$stmt->bind_param("s", $_POST["email"])) {
+              $err = error_get_last();
+              if($err)
+                echo "Bind failed.  %s\n", $err['message'];
+            }
 
             $stmt->execute();
 
@@ -107,7 +119,7 @@
             }
             else {
               $stmt->close();
-
+              
               // patient account
               if ($_POST["account"] == 0) {
 
@@ -138,17 +150,91 @@
                   // Check if the hash of the entered login password, matches the stored hash.
                   // The salt and the cost factor will be extracted from $existingHashFromDb.
                   // $isPasswordCorrect = password_verify($_POST['password'], $existingHashFromDb);
+                  // TODO: La logare, daca apare acelasi utilizator in ambele baze de date, sa se intample ceva?
 
+                  if (strlen($nume) > 0 &&
+                      strlen($prenume) > 0 &&
+                      strlen($cnp) > 0 &&
+                      strlen($telefon) > 0 &&
+                      strlen($data_nastere) > 0 &&
+                      ($asigurare == 0 || $asigurare == 1)
+                      ) {
+                    // no need to check email and password as we already checked them before
+
+                    // Prepare an SQL statement with placeholders
+                    $sql = "INSERT INTO pacienti (nume, prenume, cnp, sex, telefon, email, parola, data_nastere, asigurare) 
+                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+
+                    // Prepare the statement
+                    $stmt = $mysqli->prepare($sql);
+
+                    // Bind parameters to the placeholders
+                    $stmt->bind_param("ssssssssi", $nume, $prenume, $cnp, $sex, $telefon, $email, $parola, $data_nastere, $asigurare);
+
+                    // $stmt->execute();
+                    if($stmt === false) {
+                        echo $mysqli->error;
+                        die();
+                    }
+                    if($stmt->execute() === false) {
+                        echo $mysqli->error;
+                        die();
+                    }
+
+                    // Check if the insertion was successful
+                    if ($stmt->affected_rows > 0) {
+                      echo "Înregistrarea a avut loc cu success.";
+                    } else {
+                      echo "Eroare la adăugarea în baza de date: " . $stmt->error;
+                      // maybe the data sent from the form isn't correct
+                      // or the user manually accessed the page?
+                    }
+
+                    // Close the statement and connection
+                    $stmt->close();
+                    $mysqli->close();
+                  }
+                  else {
+                    echo "Eroare la trimiterea datelor.";
+                    // one or more fields are empty or incorrect
+                  }
+                }
+                else {
+                  echo "Eroare la trimiterea datelor!";
+                  // passwords don't match or are of length 0
+                }
+              }
+              // medic account
+              else if ($_POST["account"] == 1) {
+
+                // check password fields again
+                if (strcmp($_POST["pass1"], $_POST["pass2"]) == 0 &&
+                    strlen($_POST["pass1"]) > 0 && 
+                    strlen($_POST["pass2"]) > 0) {
+                  // no need to check email and password as we already checked them before
                   
+                  $nume = $_POST["firstname"];
+                  $prenume = $_POST["lastname"];
+                  $email = $_POST["email"];
+                  $parola = password_hash($_POST["pass1"], PASSWORD_DEFAULT);
+                  $specializare = $_POST["specializare"];
+                  $telefonCabinet = $_POST["telefonCabinet"];
+
+                  if (strlen($nume) > 0 &&
+                      strlen($prenume) > 0 &&
+                      strlen($specializare) > 0 &&
+                      strlen($telefonCabinet) > 0
+                      ) {
                   // Prepare an SQL statement with placeholders
-                  $sql = "INSERT INTO pacienti (nume, prenume, cnp, sex, telefon, email, parola, data_nastere, asigurare) 
-                          VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                  $sql = "INSERT INTO medici (nume, prenume, specializare, email, parola, telefon_cabinet) 
+                  VALUES (?, ?, ?, ?, ?, ?)";
 
                   // Prepare the statement
                   $stmt = $mysqli->prepare($sql);
 
                   // Bind parameters to the placeholders
-                  $stmt->bind_param("ssssssssi", $nume, $prenume, $cnp, $sex, $telefon, $email, $parola, $data_nastere, $asigurare);
+                  $stmt->bind_param("ssssss", $nume, $prenume, $specializare, $email, $parola, $telefonCabinet);
+
 
                   // $stmt->execute();
                   if($stmt === false) {
@@ -165,28 +251,35 @@
                     echo "Înregistrarea a avut loc cu success.";
                   } else {
                     echo "Eroare la adăugarea în baza de date: " . $stmt->error;
+                    // maybe the data sent from the form isn't correct
+                    // or the user manually accessed the page?
                   }
 
                   // Close the statement and connection
                   $stmt->close();
                   $mysqli->close();
+                  }
+                  else {
+                    echo "Eroare la trimiterea datelor.";
+                    // one or more fields are empty or incorrect
+                  }
                 }
                 else {
-                  echo "Parola invalida!";
+                  echo "Eroare la trimiterea datelor!";
+                  // passwords don't match or are of length 0
                 }
-              }
-              // medic account
-              else if ($_POST["account"] == 1) {
 
               }
               else {
                 echo "Eroare la trimiterea datelor.";
+                // $_POST["account"] is neither 0 nor 1
               }
             }
           }
         }
         else {
           echo "Eroare la trimiterea datelor.";
+          // email length is 0
         }
       ?>
     </div>
