@@ -58,19 +58,24 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
                 <div class="modal-body" style="padding:40px 50px;">
-                <form role="form">
+                <form action="/login" method="post" id="loginForm" role="form">
                     <div class="mb-3">
-                        <label for="username"><i class="fa fa-user"></i> E-mail</label>
-                        <input type="text" class="form-control" id="username" placeholder="Introduceți adresa de e-mail">
+                        <label for="emailLogin"><i class="fa fa-user"></i> E-mail</label>
+                        <input type="text" class="form-control" id="emailLogin" name="emailLogin" placeholder="Introduceți adresa de e-mail">
                     </div>
                     
-                    <div class="mb-4">
-                        <label for="password"><i class="fa fa-eye"></i> Parolă</label>
-                        <input type="text" class="form-control" id="password" placeholder="Introduceți parola">
+                    <div class="mb-1">
+                        <label for="passwordLogin"><i class="fa fa-eye"></i> Parolă</label>
+                        <input type="password" class="form-control" id="passwordLogin" name="passwordLogin" placeholder="Introduceți parola">
+                    </div>
+
+                    <div class="mb-2">
+                        <input type="checkbox" onclick="showPass()">
+                        <p class="mb-1 d-inline">Afișare parolă</p>
                     </div>
                     
                     <div class="checkbox">
-                        <label><input type="checkbox" class="me-1" id="remember" autocomplete="off" checked>Ține minte sesiunea</label>
+                        <label><input type="checkbox" class="me-1" id="rememberLogin" name="rememberLogin" autocomplete="off" checked>Ține minte sesiunea</label>
                     </div>
 
                     <div class="mt-4">

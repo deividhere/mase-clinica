@@ -22,6 +22,16 @@ function pacientClicked() {
         divDataNastere.style.display = "block";
         divAsigurare.style.display = "block";
 
+        divTipAsigurare = document.getElementById("divTipAsigurare");
+        divCasaAsigurare = document.getElementById("divCasaAsigurare");
+
+        // check if "asigurareDa" is actually clicked
+        if (document.querySelector('input[name="asigurare"]:checked').value == 1) {
+            // show asigurare fields 
+            divTipAsigurare.style.display = "block";
+            divCasaAsigurare.style.display = "block";
+        }
+
         // hide medic fields
         divSpecializare.style.display = "none";
         divTelefonCabinet.style.display = "none";
@@ -35,6 +45,9 @@ function medicClicked() {
     divDataNastere = document.getElementById("divDataNastere");
     divAsigurare = document.getElementById("divAsigurare");
 
+    divTipAsigurare = document.getElementById("divTipAsigurare");
+    divCasaAsigurare = document.getElementById("divCasaAsigurare");
+
     divSpecializare = document.getElementById("divSpecializare");
     divTelefonCabinet = document.getElementById("divTelefonCabinet");
 
@@ -46,6 +59,10 @@ function medicClicked() {
         divTelefon.style.display = "none";
         divDataNastere.style.display = "none";
         divAsigurare.style.display = "none";
+
+        // hide asigurare fields 
+        divTipAsigurare.style.display = "none";
+        divCasaAsigurare.style.display = "none";
 
         // show medic fields
         divSpecializare.style.display = "block";
@@ -316,6 +333,50 @@ function checkTelefon() {
     }
 }
 
+function asigurareDaClicked() {
+    divTipAsigurare = document.getElementById("divTipAsigurare");
+    divCasaAsigurare = document.getElementById("divCasaAsigurare");
+
+    // check if "asigurareDa" is actually clicked
+    if (document.querySelector('input[name="asigurare"]:checked').value == 1) {
+        // show asigurare fields 
+        divTipAsigurare.style.display = "block";
+        divCasaAsigurare.style.display = "block";
+    }
+}
+
+function asigurareNuClicked() {
+    divTipAsigurare = document.getElementById("divTipAsigurare");
+    divCasaAsigurare = document.getElementById("divCasaAsigurare");
+
+    // check if "asigurareDa" is actually clicked
+    if (document.querySelector('input[name="asigurare"]:checked').value == 0) {
+        // hide asigurare fields 
+        divTipAsigurare.style.display = "none";
+        divCasaAsigurare.style.display = "none";
+    }
+}
+
+function checkCasaAsigurare() {
+    var casa = document.getElementById("casaAsigurare");
+
+    var error = document.getElementById("errCasaAsigurare");
+
+    if (casa.value.length == 0) {
+        error.style.color = badColor;
+        error.innerHTML = "Câmpul \"Casa de asigurări\" nu poate fi gol.";
+
+        return false;
+    }
+    else {
+        casa.classList.remove('highlight');
+        error.style.color = goodColor;
+        error.innerHTML = "";
+        
+        return true;
+    }
+}
+
 function checkSpecializare() {
     var specializare = document.getElementById("specializare");
 
@@ -458,6 +519,24 @@ function registerClicked() {
 
             return;
         }
+
+        var asigurat = document.querySelector('input[name="asigurare"]:checked').value;
+        
+        if (asigurat == 1) {
+            var casaAsigurare = document.getElementById("casaAsigurare");
+
+            // check casaAsigurare
+            if (!checkCasaAsigurare()) {
+                casaAsigurare.scrollIntoView();
+                casaAsigurare.classList.add('highlight');
+                setTimeout(function() { 
+                    casaAsigurare.classList.remove('highlight'); }, 
+                    2000
+                );
+    
+                return;
+            }
+        }
     }
     // else medic
     else {
@@ -497,19 +576,6 @@ function registerClicked() {
 
         return;
     }
-
-    // var account = document.querySelector('input[name="account"]:checked').value == 1 ? "Medic" : "Pacient" ;
-    // 
-    // window.alert(
-    //     "Account: " + account + " " + document.querySelector('input[name="account"]:checked').value + "\n" +
-    //     "First name: " + first.value + "\n" +
-    //     "Last name: " + last.value + "\n" +
-    //     "Email: " + email.value + "\n" +
-    //     "Pass1: " + pass1.value + "\n" +
-    //     "Pass2: " + pass2.value + "\n" +
-    //     "Terms: " + terms.value + "\n" +
-    //     "Registration successful!"
-    // );
 
     document.getElementById('fileForm').submit();
 }

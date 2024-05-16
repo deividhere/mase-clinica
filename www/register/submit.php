@@ -81,6 +81,12 @@
         // Create connection
         $mysqli = new mysqli($servername, $username, $password, $database);
 
+        // Set autocommit to off
+        $mysqli->autocommit(FALSE);
+
+        // Start transaction
+        $mysqli->begin_transaction();
+
         // Check connection
         if ($mysqli->connect_error) {
           die("Conectarea la baza de date a eșuat: " . $mysqli->connect_error);
@@ -99,7 +105,6 @@
             echo "Există deja un <b>pacient</b> cu această adresă de e-mail.";
           }
           else {
-            $stmt->free_result();
             $stmt->close();
 
             $sql = "SELECT idmedic FROM medici WHERE email = ?";
@@ -147,6 +152,14 @@
                   $data_nastere = date('Y-m-d', strtotime($_POST["dataNastere"]));
                   $asigurare = $_POST["asigurare"];
                   
+                  $tip_asigurare = null;
+                  $casa_asigurare = null;
+
+                  if ($asigurare == 1) {
+                    $tip_asigurare = $_POST["tipAsigurare"];
+                    $casa_asigurare = $_POST["casaAsigurare"];
+                  }
+
                   // Check if the hash of the entered login password, matches the stored hash.
                   // The salt and the cost factor will be extracted from $existingHashFromDb.
                   // $isPasswordCorrect = password_verify($_POST['password'], $existingHashFromDb);
@@ -157,51 +170,110 @@
                       strlen($cnp) > 0 &&
                       strlen($telefon) > 0 &&
                       strlen($data_nastere) > 0 &&
-                      ($asigurare == 0 || $asigurare == 1)
+                      ($asigurare == 0 || $asigurare == 1) &&
+                      ((isset($tip_asigurare) && ($tip_asigurare == 1 || $tip_asigurare == 2)) || !isset($tip_asigurare)) &&
+                      ((isset($casa_asigurare) && strlen($casa_asigurare) > 0) || !isset($casa_asigurare))
                       ) {
                     // no need to check email and password as we already checked them before
 
-                    // Prepare an SQL statement with placeholders
-                    $sql = "INSERT INTO pacienti (nume, prenume, cnp, sex, telefon, email, parola, data_nastere, asigurare) 
-                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
-
-                    // Prepare the statement
+                    // check if CNP is already in the table
+                    $sql = "SELECT idpacient FROM pacienti WHERE cnp = ?";
                     $stmt = $mysqli->prepare($sql);
+                    $stmt->bind_param("s", $cnp);
 
-                    // Bind parameters to the placeholders
-                    $stmt->bind_param("ssssssssi", $nume, $prenume, $cnp, $sex, $telefon, $email, $parola, $data_nastere, $asigurare);
+                    $stmt->execute();
 
-                    // $stmt->execute();
-                    if($stmt === false) {
-                        echo $mysqli->error;
-                        die();
+                    $result = $stmt->get_result();
+
+                    if ($result->num_rows > 0) {
+                      echo "Există deja o intrare cu același CNP!";
                     }
-                    if($stmt->execute() === false) {
-                        echo $mysqli->error;
-                        die();
-                    }
+                    else {
+                      $stmt->close();
 
-                    // Check if the insertion was successful
-                    if ($stmt->affected_rows > 0) {
-                      echo "Înregistrarea a avut loc cu success.";
-                    } else {
-                      echo "Eroare la adăugarea în baza de date: " . $stmt->error;
-                      // maybe the data sent from the form isn't correct
-                      // or the user manually accessed the page?
-                    }
+                      // Prepare an SQL statement with placeholders
+                      $sql = "INSERT INTO pacienti (nume, prenume, cnp, sex, telefon, email, parola, data_nastere, asigurare) 
+                      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
-                    // Close the statement and connection
-                    $stmt->close();
-                    $mysqli->close();
+                      // Prepare the statement
+                      $stmt = $mysqli->prepare($sql);
+
+                      // Bind parameters to the placeholders
+                      $stmt->bind_param("ssssssssi", $nume, $prenume, $cnp, $sex, $telefon, $email, $parola, $data_nastere, $asigurare);
+
+                      // $stmt->execute();
+                      if($stmt === false) {
+                          echo $mysqli->error;
+                          die();
+                      }
+                      if($stmt->execute() === false) {
+                          echo $mysqli->error;
+                          die();
+                      }
+
+
+                      // Check if the insertion was successful
+                      if ($stmt->affected_rows > 0) {
+                        $stmt->close();
+
+                        $last_id = $mysqli->insert_id;
+
+                        // add entry to "asigurare" table
+                        $sql = "INSERT INTO asigurare (idpacient, tip_asigurare, casa_asigurare) 
+                        VALUES (?, ?, ?)";
+
+                        $stmt = $mysqli->prepare($sql);
+
+                        if ($asigurare == 0) {
+                          // tip_asigurare will be "Neasigurat"
+                          $tip_asigurare = "Neasigurat";
+                          $casa_asigurare = "Fara";
+                        }
+
+                        $stmt->bind_param("iss", $last_id, $tip_asigurare, $casa_asigurare);
+
+                        $stmt->execute();
+
+                        if ($stmt->affected_rows > 0) {
+                          echo "Înregistrarea a avut loc cu success.";
+
+                          // commit transaction
+                          $mysqli->commit();
+                        }
+                        else {
+                          echo "A apărut o eroare la adăugarea informațiilor despre asigurare!";
+
+                          // something went wrong, rollback
+                          $mysqli->rollback();
+                        }
+                      } else {
+                        echo "Eroare la adăugarea în baza de date: " . $stmt->error;
+                        // maybe the data sent from the form isn't correct
+                        // or the user manually accessed the page?
+
+                        // something went wrong, rollback
+                        $mysqli->rollback();
+                      }
+
+
+                      // Close the statement
+                      $stmt->close();
+                    }
                   }
                   else {
                     echo "Eroare la trimiterea datelor.";
                     // one or more fields are empty or incorrect
+                    
+                    // something went wrong, rollback
+                    $mysqli->rollback();
                   }
                 }
                 else {
                   echo "Eroare la trimiterea datelor!";
                   // passwords don't match or are of length 0
+
+                  // something went wrong, rollback
+                  $mysqli->rollback();
                 }
               }
               // medic account
@@ -249,30 +321,44 @@
                   // Check if the insertion was successful
                   if ($stmt->affected_rows > 0) {
                     echo "Înregistrarea a avut loc cu success.";
+
+                    // commit transaction
+                    $mysqli->commit();
                   } else {
                     echo "Eroare la adăugarea în baza de date: " . $stmt->error;
                     // maybe the data sent from the form isn't correct
                     // or the user manually accessed the page?
+
+                    // something went wrong, rollback
+                    $mysqli->rollback();
                   }
 
-                  // Close the statement and connection
+                  // Close the statement
                   $stmt->close();
-                  $mysqli->close();
                   }
                   else {
                     echo "Eroare la trimiterea datelor.";
                     // one or more fields are empty or incorrect
+
+                    // something went wrong, rollback
+                    $mysqli->rollback();
                   }
                 }
                 else {
                   echo "Eroare la trimiterea datelor!";
                   // passwords don't match or are of length 0
+
+                  // something went wrong, rollback
+                  $mysqli->rollback();
                 }
 
               }
               else {
                 echo "Eroare la trimiterea datelor.";
                 // $_POST["account"] is neither 0 nor 1
+
+                // something went wrong, rollback
+                $mysqli->rollback();
               }
             }
           }
@@ -280,7 +366,12 @@
         else {
           echo "Eroare la trimiterea datelor.";
           // email length is 0
+
+          // something went wrong, rollback
+          $mysqli->rollback();
         }
+
+        $mysqli->close();
       ?>
     </div>
     

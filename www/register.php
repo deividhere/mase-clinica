@@ -126,12 +126,30 @@
                     <p class="mb-1">Asigurare: </p>
 
                     <div class="d-flex gap-2">
-                      <input type="radio" class="btn-check me-2" name="asigurare" id="asigurareDa" value="0" autocomplete="off" checked>
-                      <label class="btn btn-outline-success" for="asigurareDa">Nu</label>
+                      <input type="radio" class="btn-check me-2" name="asigurare" id="asigurareNu" value="0" autocomplete="off" checked onclick="asigurareNuClicked();">
+                      <label class="btn btn-outline-success" for="asigurareNu">Nu</label>
 
-                      <input type="radio" class="btn-check" name="asigurare" id="asigurareNu" value="1" autocomplete="off">
-                      <label class="btn btn-outline-success" for="asigurareNu">Da</label>
+                      <input type="radio" class="btn-check" name="asigurare" id="asigurareDa" value="1" autocomplete="off" onclick="asigurareDaClicked();">
+                      <label class="btn btn-outline-success" for="asigurareDa">Da</label>
                     </div>
+                  </div>
+
+                  <div class="form-group mt-2" id="divTipAsigurare" style="display: none;">
+                    <p class="mb-1">Tip asigurare: </p>
+
+                    <div class="d-flex gap-2">
+                      <input type="radio" class="btn-check me-2" name="tipAsigurare" id="asigurareStat" value="1" autocomplete="off" checked>
+                      <label class="btn btn-outline-success" for="asigurareStat">Stat</label>
+
+                      <input type="radio" class="btn-check" name="tipAsigurare" id="asigurarePrivat" value="2" autocomplete="off">
+                      <label class="btn btn-outline-success" for="asigurarePrivat">Privat</label>
+                    </div>
+                  </div>
+
+                  <div class="form-group mt-2" id="divCasaAsigurare" style="display: none;">
+                    <label for="telefon">Casa de asigurări: </label> 
+                    <input class="form-control" required type="text" name="casaAsigurare" id = "casaAsigurare" onkeyup="checkCasaAsigurare();" onfocus="checkCasaAsigurare();" />   
+                    <span id="errCasaAsigurare"></span>
                   </div>
 
                   <div class="form-group mt-2" id="divSpecializare" style="display: none;">
