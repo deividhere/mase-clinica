@@ -23,10 +23,13 @@
   </head>
   <body>
     <?php 
-    session_start();
+    if (session_id() == "")
+      session_start();
     $active = 9;
     
     $rootDir = realpath($_SERVER["DOCUMENT_ROOT"]);
+    include "$rootDir/persistentlogin.php";
+    
     include "$rootDir/navbar.php";
 
     ?>

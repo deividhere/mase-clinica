@@ -7,8 +7,8 @@
 
     <title>Clinică medicală</title>
 
-    <link rel="stylesheet" type="text/css" href="./style/style.css">
-    <link rel="icon" href="./assets/favicon/favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" type="text/css" href="/style/style.css">
+    <link rel="icon" href="/assets/favicon/favicon.ico" type="image/x-icon">
 
     <!-- Bootstrap 5 CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
@@ -25,19 +25,66 @@
     if (session_id() == "")
       session_start();
     
+    $active = 3;
+
     $rootDir = realpath($_SERVER["DOCUMENT_ROOT"]);
     include "$rootDir/persistentlogin.php";
-
+    
     include "$rootDir/navbar.php";
     
-    $active = 9;
     ?>
 
     <div class="container mt-4">
-      Terms
+      <?php
+        print_r($_COOKIE);
+        echo "<br>";
+
+        if (isset($_COOKIE["cookie_consent_level"])) {
+          echo "Yes! <br>";
+
+          $ccl = $_COOKIE["cookie_consent_level"];
+          $obj = json_decode($ccl);
+
+          echo "strictly-necessary:";
+          $strictly_necessary = $obj->{'strictly-necessary'};
+          if ($strictly_necessary == 1) {
+            echo "Da";
+          } else {
+            echo "Nu";
+          }
+          echo "<br>";
+
+          echo "functionality:";
+          $functionality = $obj->{'functionality'};
+          if ($functionality == 1) {
+            echo "Da";
+          } else {
+            echo "Nu";
+          }
+          echo "<br>";
+
+          echo "tracking:";
+          $tracking = $obj->{'tracking'};
+          if ($tracking == 1) {
+            echo "Da";
+          } else {
+            echo "Nu";
+          }
+          echo "<br>";
+
+          echo "targeting:";
+          $targeting = $obj->{'targeting'};
+          if ($targeting == 1) {
+            echo "Da";
+          } else {
+            echo "Nu";
+          }
+          echo "<br>";
+        }
+      ?>
     </div>
     
-    <script src="./script/script.js"></script>
+    <script src="/script/script.js"></script>
     <!-- Cookie Consent by FreePrivacyPolicy.com https://www.FreePrivacyPolicy.com -->
     <script type="text/javascript" src="//www.freeprivacypolicy.com/public/cookie-consent/4.1.0/cookie-consent.js" charset="UTF-8"></script>
     <script type="text/javascript" charset="UTF-8">

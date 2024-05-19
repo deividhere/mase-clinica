@@ -8,13 +8,11 @@ function toggleNavbar() {
 }
 
 function showPass() {
-    var pass1 = document.getElementById('password');
+    var pass1 = document.getElementById('passwordLogin');
 
     if (pass1.type === "password") {
         pass1.type = "text";
-        pass2.type = "text";
       } else {
         pass1.type = "password";
-        pass2.type = "password";
       }
 }

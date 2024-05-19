@@ -22,17 +22,15 @@
   </head>
   <body>
     <?php 
-    session_start();
+    if (session_id() == "")
+      session_start();
     $active = 1;
-    
+
     $rootDir = realpath($_SERVER["DOCUMENT_ROOT"]);
+    include "$rootDir/persistentlogin.php";
+    
     include "$rootDir/navbar.php";
 
-    if (isset($_SESSION['loggedin']) && $_SESSION['loggedin'] == true) {
-      echo "Welcome to the member's area, " . htmlspecialchars($_SESSION['username']) . "!";
-    } else {
-      echo "Please log in first to see this page.";
-    }
     ?>
 
     <div class="container mt-4">

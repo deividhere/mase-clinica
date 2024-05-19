@@ -7,8 +7,8 @@
 
     <title>Clinică medicală</title>
 
-    <link rel="stylesheet" type="text/css" href="./style/style.css">
-    <link rel="icon" href="./assets/favicon/favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" type="text/css" href="/style/style.css">
+    <link rel="icon" href="/assets/favicon/favicon.ico" type="image/x-icon">
 
     <!-- Bootstrap 5 CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
@@ -26,18 +26,52 @@
       session_start();
     
     $rootDir = realpath($_SERVER["DOCUMENT_ROOT"]);
-    include "$rootDir/persistentlogin.php";
+    
+    $successful = false;
+
+    if (isset($_SESSION['loggedin']) && $_SESSION['loggedin'] == true) {
+      unset($_SESSION["loggedin"]);
+      unset($_SESSION["email"]);
+      unset($_SESSION["userType"]);
+      unset($_SESSION["nume"]);
+      unset($_SESSION["prenume"]);
+
+      if (isset($_COOKIE["persistentLogin"]) && $_COOKIE["persistentLogin"]) {
+        unset($_COOKIE["persistentLogin"]);
+        unset($_COOKIE["email"]);
+        unset($_COOKIE["nume"]);
+        unset($_COOKIE["prenume"]);
+        unset($_COOKIE["uniqueId"]);
+
+        setcookie('persistentLogin', '', time() - 3600, '/');
+        setcookie('email', '', time() - 3600, '/');
+        setcookie('nume', '', time() - 3600, '/');
+        setcookie('prenume', '', time() - 3600, '/');
+        setcookie('uniqueId', '', time() - 3600, '/');
+
+        // remove row from server database?
+      }
+
+      $successful = true;
+    }
 
     include "$rootDir/navbar.php";
     
-    $active = 9;
     ?>
 
     <div class="container mt-4">
-      Terms
+      <?php
+        if ($successful) {
+          echo "V-ați deconectat cu succes!";
+        }
+        else {
+          echo "Nu sunteți logat!";
+        }
+        echo "<meta http-equiv=\"refresh\" content=\"3;url=home\">";
+        ?>
     </div>
     
-    <script src="./script/script.js"></script>
+    <script src="/script/script.js"></script>
     <!-- Cookie Consent by FreePrivacyPolicy.com https://www.FreePrivacyPolicy.com -->
     <script type="text/javascript" src="//www.freeprivacypolicy.com/public/cookie-consent/4.1.0/cookie-consent.js" charset="UTF-8"></script>
     <script type="text/javascript" charset="UTF-8">

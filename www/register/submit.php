@@ -22,11 +22,14 @@
   </head>
   <body>
     <?php 
-    session_start();
+    if (session_id() == "")
+      session_start();
     
     $active = 9;
     
     $rootDir = realpath($_SERVER["DOCUMENT_ROOT"]);
+    include "$rootDir/persistentlogin.php";
+    
     include "$rootDir/navbar.php";
     
     ?>
@@ -159,11 +162,6 @@
                     $tip_asigurare = $_POST["tipAsigurare"];
                     $casa_asigurare = $_POST["casaAsigurare"];
                   }
-
-                  // Check if the hash of the entered login password, matches the stored hash.
-                  // The salt and the cost factor will be extracted from $existingHashFromDb.
-                  // $isPasswordCorrect = password_verify($_POST['password'], $existingHashFromDb);
-                  // TODO: La logare, daca apare acelasi utilizator in ambele baze de date, sa se intample ceva?
 
                   if (strlen($nume) > 0 &&
                       strlen($prenume) > 0 &&
