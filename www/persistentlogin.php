@@ -62,12 +62,16 @@
         unset($_COOKIE["nume"]);
         unset($_COOKIE["prenume"]);
         unset($_COOKIE["uniqueId"]);
+        unset($_COOKIE["userTpye"]);
+        unset($_COOKIE["userId"]);
 
         setcookie('persistentLogin', '', time() - 3600, '/');
         setcookie('email', '', time() - 3600, '/');
         setcookie('nume', '', time() - 3600, '/');
         setcookie('prenume', '', time() - 3600, '/');
         setcookie('uniqueId', '', time() - 3600, '/');
+        setcookie('userTpye', '', time() - 3600, '/');
+        setcookie('userId', '', time() - 3600, '/');
       }
     }
     else {
@@ -77,12 +81,16 @@
       unset($_COOKIE["nume"]);
       unset($_COOKIE["prenume"]);
       unset($_COOKIE["uniqueId"]);
+      unset($_COOKIE["userTpye"]);
+      unset($_COOKIE["userId"]);
 
       setcookie('persistentLogin', '', time() - 3600, '/');
       setcookie('email', '', time() - 3600, '/');
       setcookie('nume', '', time() - 3600, '/');
       setcookie('prenume', '', time() - 3600, '/');
       setcookie('uniqueId', '', time() - 3600, '/');
+      setcookie('userTpye', '', time() - 3600, '/');
+      setcookie('userId', '', time() - 3600, '/');
     }
 
     $stmt->execute();

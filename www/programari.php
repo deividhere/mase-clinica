@@ -26,51 +26,30 @@
       session_start();
     
     $rootDir = realpath($_SERVER["DOCUMENT_ROOT"]);
+    include "$rootDir/persistentlogin.php";
     
-    $successful = false;
-
-    if (isset($_SESSION['loggedin']) && $_SESSION['loggedin'] == true) {
-      unset($_SESSION["loggedin"]);
-      unset($_SESSION["email"]);
-      unset($_SESSION["userType"]);
-      unset($_SESSION["nume"]);
-      unset($_SESSION["prenume"]);
-
-      if (isset($_COOKIE["persistentLogin"]) && $_COOKIE["persistentLogin"]) {
-        unset($_COOKIE["persistentLogin"]);
-        unset($_COOKIE["email"]);
-        unset($_COOKIE["nume"]);
-        unset($_COOKIE["prenume"]);
-        unset($_COOKIE["uniqueId"]);
-        unset($_COOKIE["userTpye"]);
-        unset($_COOKIE["userId"]);
-
-        setcookie('persistentLogin', '', time() - 3600, '/');
-        setcookie('email', '', time() - 3600, '/');
-        setcookie('nume', '', time() - 3600, '/');
-        setcookie('prenume', '', time() - 3600, '/');
-        setcookie('uniqueId', '', time() - 3600, '/');
-        setcookie('userTpye', '', time() - 3600, '/');
-        setcookie('userId', '', time() - 3600, '/');
-      }
-
-      $successful = true;
-    }
-
     include "$rootDir/navbar.php";
     
     ?>
 
     <div class="container mt-4">
       <?php
-        if ($successful) {
-          echo "V-ați deconectat cu succes!";
+        if (isset($_SESSION['loggedin']) && $_SESSION['loggedin'] == true) {
+          if (!strcmp($_SESSION["userType"], "medic")) {
+            echo "medic";
+          }
+          else if (!strcmp($_SESSION["userType"], "pacient")) {
+            echo "pacient";
+          }
+          else {
+            echo "Tipul de utilizator nu este cunoscut!";
+          }
         }
         else {
           echo "Nu sunteți logat!";
+          echo "<meta http-equiv=\"refresh\" content=\"3;url=home\">";
         }
-        echo "<meta http-equiv=\"refresh\" content=\"3;url=home\">";
-        ?>
+      ?>
     </div>
     
     <script src="/script/script.js"></script>

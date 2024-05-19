@@ -57,6 +57,9 @@
         }
         
         if (isset($_GET["id"])) {
+          ?>
+          <p class="text-center h2 fw-bold mb-2 mx-1 mx-md-4 mt-4">Vizualizare medic</p>
+          <?php
           $sql = "SELECT nume, prenume, specializare, email, telefon_cabinet FROM medici WHERE idmedic = ?";
           $stmt = $mysqli->prepare($sql);
 

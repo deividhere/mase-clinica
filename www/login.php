@@ -101,16 +101,20 @@
         $result = null;
         $usertype = null;
 
+        $queryId = null;
+
         if ($result_medici->num_rows > 0) {
           $result = $result_medici;
+          $row = mysqli_fetch_assoc($result);
           $usertype = "medic";
+          $queryId = $row["idmedic"];
         }
         else if ($result_pacienti->num_rows > 0) {
           $result = $result_pacienti;
+          $row = mysqli_fetch_assoc($result);
           $usertype = "pacient";
+          $queryId = $row["idpacient"];
         }
-
-        $row = mysqli_fetch_assoc($result);
 
         $queryPassword = $row["parola"];
         $queryNume = $row["nume"];
@@ -128,6 +132,7 @@
           $_SESSION["userType"] = $usertype;
           $_SESSION["nume"] = $queryNume;
           $_SESSION["prenume"] = $queryPrenume;
+          $_SESSION["userid"] = $queryId;
 
           $success = 1;
 
@@ -146,6 +151,7 @@
               setcookie("nume", $queryNume, time() + (86400 * 30), "/");
               setcookie("prenume", $queryPrenume, time() + (86400 * 30), "/");
               setcookie("userType", $usertype, time() + (86400 * 30), "/");
+              setcookie("userId", $queryId, time() + (86400 * 30), "/");
               
               // generate unique ID based on timestamp and email address
               $uniqueId = uniqid() . md5($emailLogin);
@@ -192,12 +198,16 @@
                 unset($_COOKIE["nume"]);
                 unset($_COOKIE["prenume"]);
                 unset($_COOKIE["uniqueId"]);
+                unset($_COOKIE["userTpye"]);
+                unset($_COOKIE["userId"]);
 
                 setcookie('persistentLogin', '', time() - 3600, '/');
                 setcookie('email', '', time() - 3600, '/');
                 setcookie('nume', '', time() - 3600, '/');
                 setcookie('prenume', '', time() - 3600, '/');
                 setcookie('uniqueId', '', time() - 3600, '/');
+                setcookie('userTpye', '', time() - 3600, '/');
+                setcookie('userId', '', time() - 3600, '/');
               }
             }
             else {
@@ -223,7 +233,7 @@
         $success = 5;
       }
 
-      $stmt->execute();
+      $stmt->close();
       $mysqli->close();
     }
 

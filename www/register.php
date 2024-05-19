@@ -35,158 +35,158 @@
     ?>
 
     <div class="container mt-4">
-          <div class="card-body p-md-5">
-            <div class="row justify-content-center">
-              <div class="col-md-10 col-lg-6 col-xl-5 order-2 order-lg-1">
+      <div class="card-body p-md-5">
+        <div class="row justify-content-center">
+          <div class="col-md-10 col-lg-6 col-xl-5 order-2 order-lg-1">
 
-                <p class="text-center h1 fw-bold mb-5 mx-1 mx-md-4 mt-4">Înregistrare</p>
+            <p class="text-center h1 fw-bold mb-5 mx-1 mx-md-4 mt-4">Înregistrare</p>
 
-                <form action="/register/submit" method="post" id="fileForm" role="form">
+            <form action="/register/submit" method="post" id="fileForm" role="form">
 
-                  <div class="form-group">
-                    <p>Tip cont: </p>
+              <div class="form-group">
+                <p>Tip cont: </p>
 
-                    <div class="mt-1 d-flex justify-content-center gap-2">
-                      <input type="radio" class="btn-check me-2" name="account" id="pacient" value="0" autocomplete="off" checked onclick="pacientClicked();">
-                      <label class="btn btn-outline-success" for="pacient">Pacient</label>
+                <div class="mt-1 d-flex justify-content-center gap-2">
+                  <input type="radio" class="btn-check me-2" name="account" id="pacient" value="0" autocomplete="off" checked onclick="pacientClicked();">
+                  <label class="btn btn-outline-success" for="pacient">Pacient</label>
 
-                      <input type="radio" class="btn-check" name="account" id="medic" value="1" autocomplete="off" onclick="medicClicked();">
-                      <label class="btn btn-outline-success" for="medic">Medic</label>
-                    </div>
-                  </div>
+                  <input type="radio" class="btn-check" name="account" id="medic" value="1" autocomplete="off" onclick="medicClicked();">
+                  <label class="btn btn-outline-success" for="medic">Medic</label>
+                </div>
+              </div>
 
-                  <div class="form-group mt-2"> 	 
-                    <label for="firstname">Prenume: </label>
-                    <input class="form-control" type="text" name="firstname" id = "firstname" onkeyup="checkFirstName();" onfocus="checkFirstName();" required /> 
-                    <span id="errFirst"></span>
-                  </div>
+              <div class="form-group mt-2"> 	 
+                <label for="firstname">Prenume: </label>
+                <input class="form-control" type="text" name="firstname" id = "firstname" onkeyup="checkFirstName();" onfocus="checkFirstName();" required /> 
+                <span id="errFirst"></span>
+              </div>
 
-                  <div class="form-group mt-2">
-                    <label for="lastname">Nume: </label> 
-                    <input class="form-control" type="text" name="lastname" id = "lastname" onkeyup="checkLastName();" onfocus="checkLastName();" placeholder="" required />  
-                    <span id="errLast"></span>
-                  </div>
+              <div class="form-group mt-2">
+                <label for="lastname">Nume: </label> 
+                <input class="form-control" type="text" name="lastname" id = "lastname" onkeyup="checkLastName();" onfocus="checkLastName();" placeholder="" required />  
+                <span id="errLast"></span>
+              </div>
 
-                  <div class="form-group mt-2">
-                    <label for="email">Adresă de e-mail: </label> 
-                    <input class="form-control" required type="text" name="email" id = "email"  onkeyup="checkEmail();" onfocus="checkEmail();" />   
-                    <span id="errMail"></span>
-                  </div>
+              <div class="form-group mt-2">
+                <label for="email">Adresă de e-mail: </label> 
+                <input class="form-control" required type="text" name="email" id = "email"  onkeyup="checkEmail();" onfocus="checkEmail();" />   
+                <span id="errMail"></span>
+              </div>
 
-                  <div class="form-group">
-                    <div class="form-group mt-2">
-                    <label for="pass1">Parolă: </label>
-                    <input required name="pass1" type="password" class="form-control inputpass" minlength="8" maxlength="24" placeholder="Minimum 8 caractere"  id="pass1" onkeyup="checkFirstPass();"/> </p>
-                    <span id="errPass1"></span>
-                    </div>
-                    
-                    <div class="form-group mt-2 mb-1">
-                    <label for="pass2">Repetare parolă: </label>
-                    <input required name="pass2" type="password" class="form-control inputpass" minlength="8" maxlength="24" placeholder="Minimum 8 caractere"  id="pass2" onkeyup="checkSecondPass();" />
-                    <span id="errPass2"></span>
+              <div class="form-group">
+                <div class="form-group mt-2">
+                <label for="pass1">Parolă: </label>
+                <input required name="pass1" type="password" class="form-control inputpass" minlength="8" maxlength="24" placeholder="Minimum 8 caractere"  id="pass1" onkeyup="checkFirstPass();"/> </p>
+                <span id="errPass1"></span>
+                </div>
+                
+                <div class="form-group mt-2 mb-1">
+                <label for="pass2">Repetare parolă: </label>
+                <input required name="pass2" type="password" class="form-control inputpass" minlength="8" maxlength="24" placeholder="Minimum 8 caractere"  id="pass2" onkeyup="checkSecondPass();" />
+                <span id="errPass2"></span>
 
-                  </div>
-                  <input type="checkbox" onclick="showPass()">
-                  <p class="mb-1 d-inline">Afișare parolă</p>
-                  </div>
+              </div>
+              <input type="checkbox" onclick="showPass()">
+              <p class="mb-1 d-inline">Afișare parolă</p>
+              </div>
 
-                  <div class="form-group mt-2" id="divCNP">
-                    <label for="cnp">CNP: </label> 
-                    <input class="form-control" required type="text" name="cnp" id = "cnp" inputmode="numeric" onkeyup="checkCNP();" />   
-                    <span id="errCNP"></span>
-                  </div>
+              <div class="form-group mt-2" id="divCNP">
+                <label for="cnp">CNP: </label> 
+                <input class="form-control" required type="text" name="cnp" id = "cnp" inputmode="numeric" onkeyup="checkCNP();" />   
+                <span id="errCNP"></span>
+              </div>
 
-                  <div class="form-group mt-2" id="divSex">
-                    <p class="mb-1">Sex: </p>
+              <div class="form-group mt-2" id="divSex">
+                <p class="mb-1">Sex: </p>
 
-                    <div class="d-flex gap-2">
-                      <input type="radio" class="btn-check me-2" name="sex" id="masculin" value="0" autocomplete="off" checked>
-                      <label class="btn btn-outline-success" for="masculin">Masculin</label>
+                <div class="d-flex gap-2">
+                  <input type="radio" class="btn-check me-2" name="sex" id="masculin" value="0" autocomplete="off" checked>
+                  <label class="btn btn-outline-success" for="masculin">Masculin</label>
 
-                      <input type="radio" class="btn-check" name="sex" id="feminin" value="1" autocomplete="off">
-                      <label class="btn btn-outline-success" for="feminin">Feminin</label>
+                  <input type="radio" class="btn-check" name="sex" id="feminin" value="1" autocomplete="off">
+                  <label class="btn btn-outline-success" for="feminin">Feminin</label>
 
-                      <input type="radio" class="btn-check" name="sex" id="altul" value="2" autocomplete="off">
-                      <label class="btn btn-outline-success" for="altul">Altul</label>
-                    </div>
-                  </div>
+                  <input type="radio" class="btn-check" name="sex" id="altul" value="2" autocomplete="off">
+                  <label class="btn btn-outline-success" for="altul">Altul</label>
+                </div>
+              </div>
 
-                  <div class="form-group mt-2" id="divTelefon">
-                    <label for="telefon">Telefon: </label> 
-                    <input class="form-control" required type="text" name="telefon" id = "telefon" inputmode="numeric" onkeyup="checkTelefon();" onfocus="checkTelefon();" />   
-                    <span id="errTelefon"></span>
-                  </div>
+              <div class="form-group mt-2" id="divTelefon">
+                <label for="telefon">Telefon: </label> 
+                <input class="form-control" required type="text" name="telefon" id = "telefon" inputmode="numeric" onkeyup="checkTelefon();" onfocus="checkTelefon();" />   
+                <span id="errTelefon"></span>
+              </div>
 
-                  <div class="form-group mt-2" id="divDataNastere">
-                    <div class="mb-1">
-                      <label for="dataNastere">Data nașterii:</label>
-                    </div>
-                    <input type="date" id="dataNastere" name="dataNastere" value="2000-01-01" min="1900-01-01" max="2000-01-01" />  
-                    <span id="errDataNastere"></span>
-                  </div>
+              <div class="form-group mt-2" id="divDataNastere">
+                <div class="mb-1">
+                  <label for="dataNastere">Data nașterii:</label>
+                </div>
+                <input type="date" id="dataNastere" name="dataNastere" value="2000-01-01" min="1900-01-01" max="2000-01-01" />  
+                <span id="errDataNastere"></span>
+              </div>
 
-                  <div class="form-group mt-2" id="divAsigurare">
-                    <p class="mb-1">Asigurare: </p>
+              <div class="form-group mt-2" id="divAsigurare">
+                <p class="mb-1">Asigurare: </p>
 
-                    <div class="d-flex gap-2">
-                      <input type="radio" class="btn-check me-2" name="asigurare" id="asigurareNu" value="0" autocomplete="off" checked onclick="asigurareNuClicked();">
-                      <label class="btn btn-outline-success" for="asigurareNu">Nu</label>
+                <div class="d-flex gap-2">
+                  <input type="radio" class="btn-check me-2" name="asigurare" id="asigurareNu" value="0" autocomplete="off" checked onclick="asigurareNuClicked();">
+                  <label class="btn btn-outline-success" for="asigurareNu">Nu</label>
 
-                      <input type="radio" class="btn-check" name="asigurare" id="asigurareDa" value="1" autocomplete="off" onclick="asigurareDaClicked();">
-                      <label class="btn btn-outline-success" for="asigurareDa">Da</label>
-                    </div>
-                  </div>
+                  <input type="radio" class="btn-check" name="asigurare" id="asigurareDa" value="1" autocomplete="off" onclick="asigurareDaClicked();">
+                  <label class="btn btn-outline-success" for="asigurareDa">Da</label>
+                </div>
+              </div>
 
-                  <div class="form-group mt-2" id="divTipAsigurare" style="display: none;">
-                    <p class="mb-1">Tip asigurare: </p>
+              <div class="form-group mt-2" id="divTipAsigurare" style="display: none;">
+                <p class="mb-1">Tip asigurare: </p>
 
-                    <div class="d-flex gap-2">
-                      <input type="radio" class="btn-check me-2" name="tipAsigurare" id="asigurareStat" value="1" autocomplete="off" checked>
-                      <label class="btn btn-outline-success" for="asigurareStat">Stat</label>
+                <div class="d-flex gap-2">
+                  <input type="radio" class="btn-check me-2" name="tipAsigurare" id="asigurareStat" value="1" autocomplete="off" checked>
+                  <label class="btn btn-outline-success" for="asigurareStat">Stat</label>
 
-                      <input type="radio" class="btn-check" name="tipAsigurare" id="asigurarePrivat" value="2" autocomplete="off">
-                      <label class="btn btn-outline-success" for="asigurarePrivat">Privat</label>
-                    </div>
-                  </div>
+                  <input type="radio" class="btn-check" name="tipAsigurare" id="asigurarePrivat" value="2" autocomplete="off">
+                  <label class="btn btn-outline-success" for="asigurarePrivat">Privat</label>
+                </div>
+              </div>
 
-                  <div class="form-group mt-2" id="divCasaAsigurare" style="display: none;">
-                    <label for="telefon">Casa de asigurări: </label> 
-                    <input class="form-control" required type="text" name="casaAsigurare" id = "casaAsigurare" onkeyup="checkCasaAsigurare();" onfocus="checkCasaAsigurare();" />   
-                    <span id="errCasaAsigurare"></span>
-                  </div>
+              <div class="form-group mt-2" id="divCasaAsigurare" style="display: none;">
+                <label for="telefon">Casa de asigurări: </label> 
+                <input class="form-control" required type="text" name="casaAsigurare" id = "casaAsigurare" onkeyup="checkCasaAsigurare();" onfocus="checkCasaAsigurare();" />   
+                <span id="errCasaAsigurare"></span>
+              </div>
 
-                  <div class="form-group mt-2" id="divSpecializare" style="display: none;">
-                    <label for="specializare">Specializare: </label> 
-                    <input class="form-control" required type="text" name="specializare" id = "specializare"  onkeyup="checkSpecializare();" onfocus="checkSpecializare();" />   
-                    <span id="errSpecializare"></span>
-                  </div>
+              <div class="form-group mt-2" id="divSpecializare" style="display: none;">
+                <label for="specializare">Specializare: </label> 
+                <input class="form-control" required type="text" name="specializare" id = "specializare"  onkeyup="checkSpecializare();" onfocus="checkSpecializare();" />   
+                <span id="errSpecializare"></span>
+              </div>
 
-                  <div class="form-group mt-2" id="divTelefonCabinet" style="display: none;">
-                    <label for="telefonCabinet">Telefon cabinet: </label> 
-                    <input class="form-control" required type="text" name="telefonCabinet" id = "telefonCabinet" inputmode="numeric" onkeyup="checkTelefonCabinet();" onfocus="checkTelefonCabinet();" />   
-                    <span id="errTelefonCabinet"></span>
-                  </div>
+              <div class="form-group mt-2" id="divTelefonCabinet" style="display: none;">
+                <label for="telefonCabinet">Telefon cabinet: </label> 
+                <input class="form-control" required type="text" name="telefonCabinet" id = "telefonCabinet" inputmode="numeric" onkeyup="checkTelefonCabinet();" onfocus="checkTelefonCabinet();" />   
+                <span id="errTelefonCabinet"></span>
+              </div>
 
-                  <div class="form-group mt-2">
-                    <div class="p-2 rounded" id="checkDiv">
-                      <input type="checkbox" required name="terms" onchange="checkTerms();" id="terms">   
-                      <label for="terms">
-                        <!-- I agree with the <a href="terms.php" title="You may read our terms and conditions by clicking on this link">terms and conditions</a> for Registration. -->
-                        Sunt de acord cu <a href="/terms-of-service.php">termenii serviciului</a>.
-                      </label>
-                    </div>
+              <div class="form-group mt-2">
+                <div class="p-2 rounded" id="checkDiv">
+                  <input type="checkbox" required name="terms" onchange="checkTerms();" id="terms">   
+                  <label for="terms">
+                    <!-- I agree with the <a href="terms.php" title="You may read our terms and conditions by clicking on this link">terms and conditions</a> for Registration. -->
+                    Sunt de acord cu <a href="/terms-of-service.php">termenii serviciului</a>.
+                  </label>
+                </div>
 
-                    <span id="errTerms"></span>
-                  </div>
+                <span id="errTerms"></span>
+              </div>
 
-                  <div class="form-group mt-4 d-flex justify-content-center">
-                    <button  type="button" data-mdb-button-init data-mdb-ripple-init class="btn btn-success btn-lg" onclick="registerClicked();">Înregistrare</button>
-                  </div>
+              <div class="form-group mt-4 d-flex justify-content-center">
+                <button  type="button" data-mdb-button-init data-mdb-ripple-init class="btn btn-success btn-lg" onclick="registerClicked();">Înregistrare</button>
+              </div>
 
-                  </fieldset>
-                </form>
-            </div>
-          </div>
+              </fieldset>
+            </form>
+        </div>
+      </div>
     </div>
     
     <script src="/script/script.js"></script>

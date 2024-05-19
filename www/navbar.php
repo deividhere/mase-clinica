@@ -26,7 +26,6 @@
             <li class="right">
                 <?php 
                     if (isset($_SESSION['loggedin']) && $_SESSION['loggedin'] == true) {
-                        // echo "Welcome to the member's area, " . htmlspecialchars($_SESSION['username']) . "!";
                 ?>
                     <button class="btn-navbar<?php if ($active == 9) {echo " active";};?>" data-bs-toggle="modal" data-bs-target="#myModalUser">
                 <?php
@@ -74,13 +73,15 @@
                         <input type="password" class="form-control" id="passwordLogin" name="passwordLogin" placeholder="Introduceți parola">
                     </div>
 
-                    <div class="mb-2">
-                        <input type="checkbox" onclick="showPass()" id="showpass" name="showpass">
-                        <p class="mb-1 d-inline">Afișare parolă</p>
-                    </div>
-                    
-                    <div class="checkbox">
-                        <label><input type="checkbox" class="me-1" id="rememberLogin" name="rememberLogin" autocomplete="off" checked>Ține minte sesiunea</label>
+                    <div class="row mb-2 justify-content-between w-100">
+                        <div class="col-sm-auto checkbox">
+                            <label><input type="checkbox" class="me-1" id="rememberLogin" name="rememberLogin" autocomplete="off" checked>Ține minte sesiunea</label>
+                        </div>
+
+                        <div class="col-sm-auto">
+                            <input type="checkbox" onclick="showPass()" id="showpass" name="showpass">
+                            <p class="mb-1 d-inline">Afișare parolă</p>
+                        </div>
                     </div>
 
                     <div class="mt-4">
@@ -111,7 +112,7 @@
             <!-- Modal content-->
             <div class="modal-content">
                 <div class="modal-header" style="padding:35px 50px;">
-                    <h2 class="modal-title w-100 ms-4"><i class="fa fa-lock"></i> <?php echo ucfirst($_SESSION["userType"]); ?></h4>
+                    <h2 class="modal-title w-100 ms-4"><i class="fa fa-lock"></i> <?php echo ucfirst($_SESSION["userType"]); ?> </h4>
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
                 <div class="modal-body" style="padding:40px 50px;">
@@ -123,34 +124,37 @@
                     if (!strcmp($_SESSION["userType"], "pacient"))
                     {
                     ?>
+                    <!-- Patient modal user -->
                         <div class="btn-group mb-2" role="group" aria-label="Button group with nested dropdown">
                             <div class="btn-group" role="group">
                                 <button id="btnGroupDrop1" type="button" class="btn btn-outline-success dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
                                     Vizualizare
                                 </button>
                                 <ul class="dropdown-menu" aria-labelledby="btnGroupDrop1">
-                                <li><a class="dropdown-item" href="#">Programări</a></li>
-                                <li><a class="dropdown-item" href="#">Diagnostic</a></li>
+                                <li><a class="dropdown-item" href="/programari">Programări</a></li>
+                                <li><a class="dropdown-item" href="/diagnostic">Diagnostic</a></li>
                                 </ul>
                             </div>
-                            <button type="button" class="btn btn-outline-success"><i class="fa fa-user" aria-hidden="true"></i> Detalii cont</button>
+                            <button type="button" class="btn btn-outline-success" onclick="window.location = '/user';"><i class="fa fa-user" aria-hidden="true"></i> Detalii cont</button>
                             <button type="button" class="btn btn-outline-danger" onclick="window.location = '/logout';"><i class="fa fa-unlink" aria-hidden="true"></i> Deconectare</button>
                         </div>
                     <?php
                     }
                     else if (!strcmp($_SESSION["userType"], "medic")) {
                     ?>
+                    <!-- Medic modal user -->
                         <div class="btn-group mb-2" role="group" aria-label="Button group with nested dropdown">
                             <div class="btn-group" role="group">
                                 <button id="btnGroupDrop1" type="button" class="btn btn-outline-success dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
                                     Vizualizare
                                 </button>
                                 <ul class="dropdown-menu" aria-labelledby="btnGroupDrop1">
-                                <li><a class="dropdown-item" href="#">Programări</a></li>
-                                <li><a class="dropdown-item" href="#">Diagnostic</a></li>
+                                <li><a class="dropdown-item" href="/programari">Programări</a></li>
+                                <li><a class="dropdown-item" href="/diagnostic">Diagnostic</a></li>
+                                <li><a class="dropdown-item" href="/concediu">Concedii</a></li>
                                 </ul>
                             </div>
-                            <button type="button" class="btn btn-outline-success"><i class="fa fa-user" aria-hidden="true"></i> Detalii cont</button>
+                            <button type="button" class="btn btn-outline-success" onclick="window.location = '/user';"><i class="fa fa-user" aria-hidden="true"></i> Detalii cont</button>
                             <button type="button" class="btn btn-outline-danger" onclick="window.location = '/logout';"><i class="fa fa-unlink" aria-hidden="true"></i> Deconectare</button>
                         </div>
                     <?php
