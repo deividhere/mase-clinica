@@ -22,7 +22,7 @@ CREATE TABLE pacienti (
     telefon VARCHAR(50) NOT NULL,
     email VARCHAR(50) NOT NULL UNIQUE,
     parola VARCHAR(255) NOT NULL, 
-    data_nastere DATE NOT NULL,
+    data_nastere DATE NOT NULL DEFAULT (CURDATE()),
     asigurare BOOLEAN DEFAULT 0
 );
 
@@ -73,6 +73,7 @@ CREATE TABLE concediu (
 CREATE TABLE farmacie (
 	idfarmacie INT PRIMARY KEY AUTO_INCREMENT NOT NULL,
     idmedicament INT NOT NULL,
+    nume VARCHAR(255) NOT NULL,
     stoc INT NOT NULL
 );
 
@@ -80,7 +81,13 @@ CREATE TABLE asigurare (
     idasigurare    INT PRIMARY KEY AUTO_INCREMENT NOT NULL,
     idpacient      INT NOT NULL,
     tip_asigurare  ENUM('Stat', 'Privat', 'Neasigurat'),
-    casa_asigurare VARCHAR(50)
+    casa_asigurare VARCHAR(50) DEFAULT ("Fara")
+);
+
+CREATE TABLE persistentlogin (
+	idlogin 	INT PRIMARY KEY AUTO_INCREMENT NOT NULL,
+    uniqueid	VARCHAR(255) NOT NULL,
+    email		VARCHAR(255) NOT NULL
 );
 
 -- Foreign keys
@@ -137,3 +144,31 @@ ALTER TABLE farmacie
 		REFERENCES medicamente ( idmedicament )
 			ON UPDATE CASCADE
             ON DELETE CASCADE;
+
+-- Triggere
+
+DELIMITER $$
+
+CREATE TRIGGER check_leave_overlap
+BEFORE INSERT ON concediu
+FOR EACH ROW
+BEGIN
+    DECLARE overlap_count INT;
+
+    -- Check if there is an overlapping leave for the same medic
+    SELECT COUNT(*)
+    INTO overlap_count
+    FROM concediu
+    WHERE idmedic = NEW.idmedic
+      AND NEW.data_incepere <= data_sfarsit
+      AND NEW.data_sfarsit >= data_incepere;
+
+    -- If there is an overlap, raise an error
+    IF overlap_count > 0 THEN
+        SIGNAL SQLSTATE '45000' 
+        SET MESSAGE_TEXT = 'Concediul se suprapune cu altul.';
+    END IF;
+END$$
+
+DELIMITER ;
+
