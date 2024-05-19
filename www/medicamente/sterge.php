@@ -8,6 +8,7 @@
     <title>Clinică medicală</title>
 
     <link rel="stylesheet" type="text/css" href="/style/style.css">
+    <link rel="stylesheet" type="text/css" href="/style/register.css">
     <link rel="icon" href="/assets/favicon/favicon.ico" type="image/x-icon">
 
     <!-- Bootstrap 5 CSS -->
@@ -25,6 +26,8 @@
     if (session_id() == "")
       session_start();
     
+    $active = 3;
+
     $rootDir = realpath($_SERVER["DOCUMENT_ROOT"]);
     include "$rootDir/persistentlogin.php";
     
@@ -33,27 +36,65 @@
     ?>
 
     <div class="container mt-4">
-      <?php
-        if (isset($_SESSION['loggedin']) && $_SESSION['loggedin'] == true) {
-          if (!strcmp($_SESSION["userType"], "medic")) {
-            echo "medic";
-            // sa nu se suprapuna programarile si grija sa nu fie medicul in concediu!!
+      <?php 
+      if (isset($_SESSION['loggedin']) && $_SESSION['loggedin'] == true && !strcmp($_SESSION["userType"], "medic")) {
+        if (isset($_GET["id"])) {
+          // Initialize SQL fields
+          $servername = "localhost";
+          $username = "root";
+          $password = "";
+          $database = "clinica";
+
+          // Display errors
+          ini_set('display_errors', '1');
+          ini_set('display_startup_errors', '1');
+          error_reporting(E_ALL);
+          mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
+
+          // Create connection
+          $mysqli = new mysqli($servername, $username, $password, $database);
+
+          // Set autocommit to off
+          $mysqli->autocommit(FALSE);
+
+          // Start transaction
+          $mysqli->begin_transaction();
+
+          // Check connection
+          if ($mysqli->connect_error) {
+            die("Conectarea la baza de date a eșuat: " . $mysqli->connect_error);
           }
-          else if (!strcmp($_SESSION["userType"], "pacient")) {
-            echo "pacient";
+
+          $idConcediu = $_GET["id"];
+
+          $sql = "DELETE FROM medicamente WHERE idmedicament = ?";
+
+          $stmt = $mysqli->prepare($sql);
+          $stmt->bind_param("i", $idConcediu);
+          $stmt->execute();
+
+          if ($stmt->affected_rows > 0) {
+            $mysqli->commit();
+
+            echo "Medicamentul a fost șters cu succes!";
+            echo "<meta http-equiv=\"refresh\" content=\"3;url=/medicamente\">";
           }
           else {
-            echo "Tipul de utilizator nu este cunoscut!";
+            $mysqli->rollback();
+
+            echo "Eroare la ștergerea medicamentului!";
           }
         }
-        else {
-          echo "Nu sunteți logat!";
-          echo "<meta http-equiv=\"refresh\" content=\"3;url=home\">";
-        }
+      }
+      else {
+        echo "Nu sunteți logat cu un cont de medic!";
+        echo "<meta http-equiv=\"refresh\" content=\"3;url=home\">";
+      }
       ?>
     </div>
     
     <script src="/script/script.js"></script>
+    <script src="/script/concediu.js"></script>
     <!-- Cookie Consent by FreePrivacyPolicy.com https://www.FreePrivacyPolicy.com -->
     <script type="text/javascript" src="//www.freeprivacypolicy.com/public/cookie-consent/4.1.0/cookie-consent.js" charset="UTF-8"></script>
     <script type="text/javascript" charset="UTF-8">
@@ -61,5 +102,6 @@
     cookieconsent.run({"notice_banner_type":"simple","consent_type":"implied","palette":"dark","language":"ro","page_load_consent_levels":["strictly-necessary","functionality","tracking","targeting"],"notice_banner_reject_button_hide":false,"preferences_center_close_button_hide":true,"page_refresh_confirmation_buttons":false,"website_name":"david.d0.ro","website_privacy_policy_url":"http://www.david.d0.ro"});
     });
     </script>
+    
   </body>
 </html>

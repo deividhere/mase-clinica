@@ -26,7 +26,7 @@
     if (session_id() == "")
       session_start();
     
-    $active = 9;
+    $active = 3;
 
     $rootDir = realpath($_SERVER["DOCUMENT_ROOT"]);
     include "$rootDir/persistentlogin.php";
@@ -42,32 +42,44 @@
       <div class="card-body p-md-5">
           <div class="row justify-content-center">
             <div class="col-md-10 col-lg-6 col-xl-5 order-2 order-lg-1">
-              <p class="text-center h1 fw-bold mb-5 mx-1 mx-md-4 mt-4">Adăugare concediu</p>
+              <p class="text-center h1 fw-bold mb-5 mx-1 mx-md-4 mt-4">Adăugare medicamente</p>
 
-              <form action="/concediu/adauga/submit" method="post" id="concediuForm" role="form">
+              <form action="/medicamente/adauga/submit" method="post" id="medicamentForm" role="form">
 
-                <div class="form-group mt-2" id="divDataIncepere">
-                  <div class="p-2 rounded" id="checkDataIncepere">
-                    <div class="mb-1">
-                      <div class="mb-1">
-                        <label for="dataIncepere">Dată începere:</label>
-                      </div>
-                      <input type="date" id="dataIncepere" name="dataIncepere" value="2000-01-01" min="1900-01-01" max="2100-01-01" onchange="beginDateChanged();"/>  
-                    </div>
-                    <span id="errDataIncepere"></span>
-                  </div>
+                <div class="form-group mt-2"> 	 
+                  <label for="denumire">Denumire: </label>
+                  <input class="form-control" type="text" name="denumire" id = "denumire" onkeyup="checkDenumire();" onfocus="checkDenumire();" required /> 
+                  <span id="errDenumire"></span>
                 </div>
 
-                <div class="form-group mt-2" id="divDataSfarsit">
-                  <div class="p-2 rounded" id="checkDataSfarsit">
-                    <div class="mb-1">
-                      <div class="mb-1">
-                        <label for="dataSfarsit">Dată sfârșit:</label>
-                      </div>
-                      <input type="date" id="dataSfarsit" name="dataSfarsit" value="2000-01-01" min="1900-01-01" max="2100-01-01" onchange="endDateChanged();"/>  
-                    </div>
-                    <span id="errDataSfarsit"></span>
-                  </div>
+                <div class="form-group mt-2"> 	 
+                  <label for="descriere">Descriere: </label>
+                  <input class="form-control" type="text" name="descriere" id = "descriere" onkeyup="checkDescriere();" onfocus="checkDescriere();" required /> 
+                  <span id="errDescriere"></span>
+                </div>
+
+                <div class="form-group mt-2"> 	 
+                  <label for="prospect">Prospect: </label>
+                  <input class="form-control" type="text" name="prospect" id = "prospect" onkeyup="checkProspect();" onfocus="checkProspect();" required /> 
+                  <span id="errProspect"></span>
+                </div>
+
+                <div class="form-group mt-2"> 	 
+                  <label for="pret">Pret: </label>
+                  <input class="form-control" type="text" name="pret" id = "pret" onkeyup="checkPret();" onfocus="checkPret();" required /> 
+                  <span id="errPret"></span>
+                </div>
+
+                <div class="form-group mt-2"> 	 
+                  <label for="nume_farmacie">Nume farmacie: </label>
+                  <input class="form-control" type="text" name="nume_farmacie" id = "nume_farmacie" onkeyup="checkNumeFarmacie();" onfocus="checkNumeFarmacie();" required /> 
+                  <span id="errNumeFarmacie"></span>
+                </div>
+
+                <div class="form-group mt-2"> 	 
+                  <label for="stoc">Stoc: </label>
+                  <input class="form-control" type="text" name="stoc" id = "stoc" inputmode="numeric" onkeyup="checkStoc();" onfocus="checkStoc();" required /> 
+                  <span id="errStoc"></span>
                 </div>
 
                 <div class="form-group mt-4 d-flex justify-content-center">
@@ -77,13 +89,6 @@
           </div>
         </div>
       </div>
-      <script>
-        dataIncepere.min = new Date().toISOString().split("T")[0];
-        dataIncepere.value = new Date().toISOString().split("T")[0];
-
-        dataSfarsit.min = new Date().toISOString().split("T")[0];
-        dataSfarsit.value = new Date().toISOString().split("T")[0];
-      </script>
       <?php
       }
       else {
@@ -94,7 +99,7 @@
     </div>
     
     <script src="/script/script.js"></script>
-    <script src="/script/concediu.js"></script>
+    <script src="/script/medicamente.js"></script>
     <!-- Cookie Consent by FreePrivacyPolicy.com https://www.FreePrivacyPolicy.com -->
     <script type="text/javascript" src="//www.freeprivacypolicy.com/public/cookie-consent/4.1.0/cookie-consent.js" charset="UTF-8"></script>
     <script type="text/javascript" charset="UTF-8">

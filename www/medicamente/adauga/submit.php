@@ -25,8 +25,6 @@
     if (session_id() == "")
       session_start();
     
-    $active = 9;
-
     $rootDir = realpath($_SERVER["DOCUMENT_ROOT"]);
     include "$rootDir/persistentlogin.php";
     
@@ -37,8 +35,8 @@
     <div class="container mt-4">
       <?php
       if (isset($_SESSION['loggedin']) && $_SESSION['loggedin'] == true && !strcmp($_SESSION["userType"], "medic")) {
-        if (isset($_POST["dataIncepere"]) && isset($_POST["dataSfarsit"])) {
-          // echo "Data incepere: " . $_POST["dataIncepere"] . "<br>";
+        if (isset($_POST["denumire"])) {
+          // echo "denumire: " . $_POST["denumire"] . "<br>";
           // echo "Data sfarsit: " . $_POST["dataSfarsit"] . "<br>";
 
           // Initialize SQL fields
@@ -65,41 +63,45 @@
             die("Conectarea la baza de date a eșuat: " . $mysqli->connect_error);
           }
 
-          $dataincepere = date('Y-m-d', strtotime($_POST["dataIncepere"]));
-          $datasfarsit = date('Y-m-d', strtotime($_POST["dataSfarsit"]));
-          $idmedic = $_SESSION["userid"];
-
-          $sql = "INSERT INTO concediu (data_incepere, data_sfarsit, idmedic) 
-          VALUES (?, ?, ?)";
+          $sql = "INSERT INTO medicamente (denumire, descriere, prospect, pret) 
+          VALUES (?, ?, ?, ?)";
 
           $stmt = $mysqli->prepare($sql);
-          $stmt->bind_param("sss", $dataincepere, $datasfarsit, $idmedic);
-          try {
-            $stmt->execute();
+          $stmt->bind_param("ssss", $_POST["denumire"], $_POST["descriere"], $_POST["prospect"], $_POST["pret"]);
+          
+          $stmt->execute();
+          
+          if ($stmt->affected_rows > 0) {
+            $stmt->close();
+
+            $last_id = $mysqli->insert_id;
+
+            $sql = "INSERT INTO farmacie (nume, stoc, idmedicament) 
+            VALUES (?, ?, ?)";
+
+            $stmt = $mysqli->prepare($sql);
+            $stmt->bind_param("sss", $_POST["nume_farmacie"], $_POST["stoc"], $last_id);
             
+            $stmt->execute();
+
             if ($stmt->affected_rows > 0) {
               $mysqli->commit();
-  
-              echo "Concediul a fost adăugat cu succes!";
-              echo "<meta http-equiv=\"refresh\" content=\"3;url=/concediu\">";
+
+              echo "Medicamentul a fost adăugat cu succes!";
+              echo "<meta http-equiv=\"refresh\" content=\"3;url=/medicamente\">";
             }
             else {
-              echo "Eroare la adăugarea concediului!";
-              
-              $mysqli->rollback();
-            }
+              echo "Eroare la adăugarea medicamentului!";
           }
-          catch (Exception $e) {
-            $error = $e->getMessage();
+          }
+          else {
+            echo "Eroare la adăugarea medicamentului!";
             
-            if (strpos($error, 'Concediul se suprapune cu altul.') !== false) {
-              echo "Eroare: " . $error;
-            }
-            else {
-              echo "Eroare la adăugarea concediului!";
-            }
+            $mysqli->rollback();
           }
-          
+
+          $stmt->close();
+          $mysqli->close();
         }
         else {
           echo "Eroare la trimiterea datelor. Vă rugăm încercați din nou.";
@@ -107,7 +109,7 @@
       }
       else {
         echo "Nu sunteți logat cu un cont de medic!";
-        echo "<meta http-equiv=\"refresh\" content=\"3;url=home\">";
+        echo "<meta http-equiv=\"refresh\" content=\"3;url=/home\">";
       }
       ?>
     </div>
