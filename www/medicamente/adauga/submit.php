@@ -36,18 +36,7 @@
       <?php
       if (isset($_SESSION['loggedin']) && $_SESSION['loggedin'] == true && !strcmp($_SESSION["userType"], "medic")) {
         if (isset($_POST["denumire"])) {
-          // echo "denumire: " . $_POST["denumire"] . "<br>";
-          // echo "Data sfarsit: " . $_POST["dataSfarsit"] . "<br>";
-
-          // Initialize SQL fields
-          $servername = "localhost";
-          $username = "root";
-          $password = "";
-          $database = "clinica";
-
-          // Display errors
-          ini_set('display_errors', '1');
-          ini_set('display_startup_errors', '1');
+          include "$rootDir/sqlinit.php";
 
           // Create connection
           $mysqli = new mysqli($servername, $username, $password, $database);

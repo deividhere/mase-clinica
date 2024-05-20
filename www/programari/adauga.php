@@ -38,17 +38,7 @@
     <div class="container mt-4">
       <?php 
       if (isset($_SESSION['loggedin']) && $_SESSION['loggedin'] == true && !strcmp($_SESSION["userType"], "pacient")) {
-        // Initialize SQL fields
-        $servername = "localhost";
-        $username = "root";
-        $password = "";
-        $database = "clinica";
-
-        // Display errors
-        ini_set('display_errors', '1');
-        ini_set('display_startup_errors', '1');
-        error_reporting(E_ALL);
-        // mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
+        include "$rootDir/sqlinit.php";
 
         // Create connection
         $mysqli = new mysqli($servername, $username, $password, $database);

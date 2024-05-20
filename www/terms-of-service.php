@@ -34,7 +34,94 @@
     ?>
 
     <div class="container mt-4">
-      Terms
+      <p class="mb-4 fw-bold fs-2 text-center">
+      Termeni și Condiții de Utilizare
+      </p>
+
+      <p class="mb-1">
+      Ultima actualizare: 20.05.2024
+      </p>
+
+      <p class="mb-3">
+      Bine ați venit la clinica noastră medicală! Vă rugăm să citiți cu atenție acești <b>Termeni și Condiții</b> înainte de a utiliza site-ul nostru web.
+      </p>
+
+      <p class="mb-2 fw-bold fs-4">
+      1. Acceptarea Termenilor
+      </p>
+
+      <p class="mb-3">
+      Prin accesarea și utilizarea acestui site web, sunteți de acord să respectați și să fiți obligat de acești Termeni și Condiții. Dacă nu sunteți de acord cu acești termeni, vă rugăm să nu utilizați site-ul nostru.
+      </p>
+
+      <p class="mb-2 fw-bold fs-4">
+      2. Servicii Oferite
+      </p>
+
+      <p class="mb-3">
+      Site-ul nostru permite pacienților să facă programări și să acceseze diagnosticele oferite de medici. De asemenea, medicii pot vedea programările pacienților și pot înregistra diagnostice.
+      </p>
+
+      <p class="mb-2 fw-bold fs-4">
+      3. Confidențialitatea Datelor
+      </p>
+
+      <p class="mb-1">
+      a. Datele personale colectate pot include: nume, prenume, email, CNP, număr de telefon, informații despre asigurare (dacă pacientul are asigurare sau nu, casa de asigurări).
+      </p>
+
+      <p class="mb-3">
+      b. Toate datele personale sunt colectate și utilizate în conformitate cu legislația în vigoare privind protecția datelor cu caracter personal (Regulamentul General privind Protecția Datelor - GDPR).
+      </p>
+
+      <p class="mb-2 fw-bold fs-4">
+      4. Utilizarea Datelor Personale
+      </p>
+
+      <p class="mb-1">
+      <b>a.</b> Datele personale colectate vor fi utilizate exclusiv pentru gestionarea programărilor, furnizarea de diagnostic și alte servicii medicale.
+      </p>
+
+      <p class="mb-3">
+      <b>b.</b> Datele nu vor fi partajate cu terțe părți fără consimțământul explicit al utilizatorilor, cu excepția cazurilor prevăzute de lege.
+      </p>
+
+      <p class="mb-2 fw-bold fs-4">
+      5. Responsabilitățile Utilizatorilor
+      </p>
+
+      <p class="mb-1">
+      <b>a.</b> Utilizatorii sunt responsabili pentru menținerea confidențialității contului și parolei lor și pentru toate activitățile desfășurate în contul lor.
+      </p>
+
+      <p class="mb-3">
+      <b>b.</b> Utilizatorii se angajează să furnizeze informații corecte și complete și să actualizeze aceste informații în mod prompt.
+      </p>
+
+      <p class="mb-2 fw-bold fs-4">
+      6. Limitarea Răspunderii
+      </p>
+
+      <p class="mb-3">
+      Clinica medicală nu va fi responsabilă pentru niciun prejudiciu direct, indirect, accidental sau de altă natură care rezultă din utilizarea sau incapacitatea de a utiliza site-ul nostru web sau serviciile oferite prin intermediul acestuia.
+      </p>
+
+      <p class="mb-2 fw-bold fs-4">
+      7. Modificarea Termenilor
+      </p>
+
+      <p class="mb-3">
+      Clinica medicală își rezervă dreptul de a modifica acești Termeni și Condiții în orice moment. Modificările vor fi efective imediat ce sunt publicate pe site-ul nostru. Vă încurajăm să revizuiți periodic acești Termeni și Condiții pentru a fi la curent cu eventualele modificări.
+      </p>
+
+      <p class="mb-2 fw-bold fs-4">
+      8. Proprietatea Intelectuală
+      </p>
+
+      <p class="mb-5">
+      Toate materialele de pe acest site, inclusiv texte, grafică, logo-uri, imagini, sunt proprietatea [Numele Clinicii] și sunt protejate de legile privind drepturile de autor și alte legi privind proprietatea intelectuală.
+      </p>
+
     </div>
     
     <script src="./script/script.js"></script>

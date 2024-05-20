@@ -36,109 +36,99 @@
 
     <div class="container mt-4">
     <?php
-        // Initialize SQL fields
-        $servername = "localhost";
-        $username = "root";
-        $password = "";
-        $database = "clinica";
+      include "$rootDir/sqlinit.php";
 
-        // Display errors
-        ini_set('display_errors', '1');
-        ini_set('display_startup_errors', '1');
-        error_reporting(E_ALL);
-        // mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
+      // Create connection
+      $mysqli = new mysqli($servername, $username, $password, $database);
 
-        // Create connection
-        $mysqli = new mysqli($servername, $username, $password, $database);
+      // Check connection
+      if ($mysqli->connect_error) {
+        die("Conectarea la baza de date a eșuat: " . $mysqli->connect_error);
+      }
+      
+      if (isset($_GET["id"])) {
+        ?>
+        <p class="text-center h2 fw-bold mb-2 mx-1 mx-md-4 mt-4">Vizualizare medicament</p>
+        <?php
+        $sql = "SELECT * FROM medicamente m INNER JOIN farmacie f ON m.idmedicament = f.idmedicament WHERE m.idmedicament = ?";
+        $stmt = $mysqli->prepare($sql);
 
-        // Check connection
-        if ($mysqli->connect_error) {
-          die("Conectarea la baza de date a eșuat: " . $mysqli->connect_error);
-        }
-        
-        if (isset($_GET["id"])) {
-          ?>
-          <p class="text-center h2 fw-bold mb-2 mx-1 mx-md-4 mt-4">Vizualizare medicament</p>
-          <?php
-          $sql = "SELECT * FROM medicamente m INNER JOIN farmacie f ON m.idmedicament = f.idmedicament WHERE m.idmedicament = ?";
-          $stmt = $mysqli->prepare($sql);
+        $stmt->bind_param("s", $_GET["id"]);
+        $stmt->execute();
 
-          $stmt->bind_param("s", $_GET["id"]);
-          $stmt->execute();
+        $result = $stmt->get_result();
 
-          $result = $stmt->get_result();
+        if ($result->num_rows > 0) {
+          $row = mysqli_fetch_assoc($result);
 
-          if ($result->num_rows > 0) {
-            $row = mysqli_fetch_assoc($result);
-
-            echo "Denumire: " . $row["denumire"] . "<br>";
-            echo "Descriere: " . $row["descriere"] . "<br>";
-            echo "Prospect: " . $row["prospect"] . "<br>";
-            echo "Pret: " . $row["pret"] . "<br>";
-            echo "Nume farmacie: " . $row["nume"] . "<br>";
-            echo "Stoc: " . $row["stoc"] . "<br>";
-            ?>
-            <div class="mt-2">
-              <button type="button" class="btn btn-outline-danger" onclick="confirmBox();">Sterge medicamentul</button>
-            </div>
-            <?php
-          }
-          else {
-            echo "Nu s-a găsit niciun medicament cu ID-ul specificat";
-          }
-        }
-        else {
-          $sql = "SELECT * FROM medicamente ORDER BY denumire";
-          $stmt = $mysqli->prepare($sql);
-  
-          $stmt->execute();
-  
-          $result = $stmt->get_result();
-  
-          if ($result->num_rows > 0) {
-            $i = 1;
-            ?>
-            <table class="table table-hover">
-            <thead class="table-light">
-              <tr>
-                <th scope="col">#</th>
-                <th scope="col">Denumire</th>
-                <th scope="col">Descriere</th>
-                <th scope="col">Prospect</th>
-                <th scope="col">Pret</th>
-              </tr>
-            </thead>
-            <tbody>
-              <?php
-                while($row = mysqli_fetch_assoc($result)) {
-                  echo "<tr class=\"clickable\" onclick=\"showDetails(". $row["idmedicament"] .")\">";
-                  echo "<th scope=\"row\">$i</th>";
-                  echo "<td>" . $row["denumire"] . "</td>";
-                  echo "<td>" . $row["descriere"] . "</td>";
-                  echo "<td>" . $row["prospect"] . "</td>";
-                  echo "<td>" . $row["pret"] . "</td>";
-                  echo "</tr>";
-                  $i++;
-                }
-              ?>
-            </tbody>
-          </table>
-            <?php
-          }
-          else {
-            echo "Nu a fost găsit niciun medicament.";
-          }
-          if (isset($_SESSION["loggedin"]) && isset($_SESSION["userType"]) && !strcmp($_SESSION["userType"], "medic")) {
+          echo "Denumire: " . $row["denumire"] . "<br>";
+          echo "Descriere: " . $row["descriere"] . "<br>";
+          echo "Prospect: " . $row["prospect"] . "<br>";
+          echo "Pret: " . $row["pret"] . "<br>";
+          echo "Nume farmacie: " . $row["nume"] . "<br>";
+          echo "Stoc: " . $row["stoc"] . "<br>";
           ?>
           <div class="mt-2">
-            <button type="button" class="btn btn-outline-success" onclick="window.location = '/medicamente/adauga';">Adăugare medicament</button>
+            <button type="button" class="btn btn-outline-danger" onclick="confirmBox();">Sterge medicamentul</button>
           </div>
           <?php
-          }
         }
-        
-        $mysqli->close();
-      ?>
+        else {
+          echo "Nu s-a găsit niciun medicament cu ID-ul specificat";
+        }
+      }
+      else {
+        $sql = "SELECT * FROM medicamente ORDER BY denumire";
+        $stmt = $mysqli->prepare($sql);
+
+        $stmt->execute();
+
+        $result = $stmt->get_result();
+
+        if ($result->num_rows > 0) {
+          $i = 1;
+          ?>
+          <table class="table table-hover">
+          <thead class="table-light">
+            <tr>
+              <th scope="col">#</th>
+              <th scope="col">Denumire</th>
+              <th scope="col">Descriere</th>
+              <th scope="col">Prospect</th>
+              <th scope="col">Pret</th>
+            </tr>
+          </thead>
+          <tbody>
+            <?php
+              while($row = mysqli_fetch_assoc($result)) {
+                echo "<tr class=\"clickable\" onclick=\"showDetails(". $row["idmedicament"] .")\">";
+                echo "<th scope=\"row\">$i</th>";
+                echo "<td>" . $row["denumire"] . "</td>";
+                echo "<td>" . $row["descriere"] . "</td>";
+                echo "<td>" . $row["prospect"] . "</td>";
+                echo "<td>" . $row["pret"] . "</td>";
+                echo "</tr>";
+                $i++;
+              }
+            ?>
+          </tbody>
+        </table>
+          <?php
+        }
+        else {
+          echo "Nu a fost găsit niciun medicament.";
+        }
+        if (isset($_SESSION["loggedin"]) && isset($_SESSION["userType"]) && !strcmp($_SESSION["userType"], "medic")) {
+        ?>
+        <div class="mt-2">
+          <button type="button" class="btn btn-outline-success" onclick="window.location = '/medicamente/adauga';">Adăugare medicament</button>
+        </div>
+        <?php
+        }
+      }
+      
+      $mysqli->close();
+    ?>
     </div>
     
     <script src="/script/script.js"></script>

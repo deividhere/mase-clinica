@@ -172,3 +172,46 @@ END$$
 
 DELIMITER ;
 
+CREATE TRIGGER trg_check_programare_before_insert
+BEFORE INSERT ON programare
+FOR EACH ROW
+BEGIN
+    DECLARE v_count INT;
+    DECLARE v_count_leave INT;
+    DECLARE v_weekday INT;
+    
+    -- Check for overlapping appointments for the same patient
+    SELECT COUNT(*) INTO v_count
+    FROM programare
+    WHERE idpacient = NEW.idpacient
+      AND data_programare = NEW.data_programare
+      AND ora_programare = NEW.ora_programare;
+    
+    -- Check if the medic is on leave during the specified appointment date
+    SELECT COUNT(*) INTO v_count_leave
+    FROM concediu
+    WHERE idmedic = NEW.idmedic
+      AND NEW.data_programare BETWEEN data_incepere AND data_sfarsit;
+
+    -- Check if the appointment date is on a weekend
+    SET v_weekday = DAYOFWEEK(NEW.data_programare);
+    
+    -- If either condition is met, signal an error
+    IF v_count > 0 THEN
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Aveți deja o programare la această oră.';
+    END IF;
+    
+    IF v_count_leave > 0 THEN
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Medicul este în concediu în acea zi.';
+    END IF;
+
+    IF v_weekday = 1 OR v_weekday = 7 THEN
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Nu puteți face o programare în weekend.';
+    END IF;
+    
+    IF CONCAT(NEW.data_programare, ' ', NEW.ora_programare) < NOW() THEN
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Programarea nu poate fi făcută în trecut.';
+    END IF;
+END//
+
+DELIMITER ;
