@@ -128,11 +128,13 @@
           else {
             echo "Nu a fost găsit niciun medicament.";
           }
+          if (isset($_SESSION["loggedin"]) && isset($_SESSION["userType"]) && !strcmp($_SESSION["userType"], "medic")) {
           ?>
           <div class="mt-2">
             <button type="button" class="btn btn-outline-success" onclick="window.location = '/medicamente/adauga';">Adăugare medicament</button>
           </div>
           <?php
+          }
         }
         
         $mysqli->close();
