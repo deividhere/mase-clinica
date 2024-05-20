@@ -84,9 +84,10 @@
                 echo "Status: " . $row["status"] . "<br>";
                 ?>
                 <div class="mt-1 d-flex gap-2">
+                  <button type="button" class="btn btn-outline-success" onclick="">Adăugare diagnostic</button>
+                  <button type="button" class="btn btn-outline-success ms-2" onclick="confirmBoxConfirm();">Confirmă programarea</button>
                   <button type="button" class="btn btn-outline-danger" onclick="confirmBoxCancel();">Anulează programarea</button>
-                  <button type="button" class="btn btn-outline-success" onclick="confirmBoxConfirm();">Confirmă programarea</button>
-                  <button type="button" class="btn btn-danger" onclick="confirmBox();">Șterge programarea</button>
+                  <button type="button" class="btn btn-danger ms-2" onclick="confirmBox();">Șterge programarea</button>
                 </div>
                 <?php
               }
