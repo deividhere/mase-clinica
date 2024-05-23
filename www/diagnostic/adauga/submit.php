@@ -74,79 +74,97 @@
           $stmt = $mysqli->prepare($sql);
           $stmt->bind_param("isss", $_POST["idprogramare"], $_POST["diagnostic"], $_POST["descriere"], $_POST["recomandari"]);
           
-          $stmt->execute();
-          
-          if ($stmt->affected_rows > 0) {
-            if ($_POST["medicineNumber"] > 0) {
-              // we also have medicine
-              $success = true;
+          try {
+            $stmt->execute();
 
-              $iddiagnostic = $mysqli->insert_id;
+            if ($stmt->affected_rows > 0) {
+              if ($_POST["medicineNumber"] > 0) {
+                // we also have medicine
+                $success = true;
 
-              // insert reteta
-              $stmt->close();
+                $iddiagnostic = $mysqli->insert_id;
 
-              $sql = "INSERT INTO reteta (iddiagnostic) 
-              VALUES (?)";
+                // insert reteta
+                $stmt->close();
 
-              $stmt = $mysqli->prepare($sql);
-              $stmt->bind_param("i", $iddiagnostic);
-              
-              $stmt->execute();
+                $sql = "INSERT INTO reteta (iddiagnostic) 
+                VALUES (?)";
 
-              if ($stmt->affected_rows > 0) {
-                $idreteta = $mysqli->insert_id;
+                $stmt = $mysqli->prepare($sql);
+                $stmt->bind_param("i", $iddiagnostic);
+                
+                $stmt->execute();
 
-                for ($i = 0; $i < $_POST["medicineNumber"]; $i++) {
-                  $stmt->close();
-  
-                  $sql = "INSERT INTO lista (idreteta, idmedicament, cantitate) 
-                  VALUES (?, ?, ?)";
+                if ($stmt->affected_rows > 0) {
+                  $idreteta = $mysqli->insert_id;
 
-                  $currentMedicine = "medicineNumber" . $i;
-                  $currentQuantity = "medicineQuantity" . $i;
-  
-                  $stmt = $mysqli->prepare($sql);
-                  $stmt->bind_param("iii", $idreteta, $_POST[$currentMedicine], $_POST[$currentQuantity]);
-                  
-                  $stmt->execute();
-                  
-                  if (!$stmt->affected_rows > 0) {
-                    $success = false;
-                    break;
+                  for ($i = 0; $i < $_POST["medicineNumber"]; $i++) {
+                    $stmt->close();
+    
+                    $sql = "INSERT INTO lista (idreteta, idmedicament, cantitate) 
+                    VALUES (?, ?, ?)";
+
+                    $currentMedicine = "medicineNumber" . $i;
+                    $currentQuantity = "medicineQuantity" . $i;
+    
+                    $stmt = $mysqli->prepare($sql);
+                    $stmt->bind_param("iii", $idreteta, $_POST[$currentMedicine], $_POST[$currentQuantity]);
+                    
+                    $stmt->execute();
+                    
+                    if (!$stmt->affected_rows > 0) {
+                      $success = false;
+                      break;
+                    }
+                  }
+    
+                  if ($success) {
+                    $mysqli->commit();
+    
+                    echo "Diagnosticul a fost adăugat cu succes!";
+                    echo "<meta http-equiv=\"refresh\" content=\"3;url=/programari\">";
+                  }
+                  else {
+                    echo "Eroare la adăugarea rețetei de medicamente! Vă rugăm încercați din nou.";
+                
+                    $mysqli->rollback();
                   }
                 }
-  
-                if ($success) {
-                  $mysqli->commit();
-  
-                  echo "Diagnosticul a fost adăugat cu succes!";
-                  echo "<meta http-equiv=\"refresh\" content=\"3;url=/programari\">";
-                }
                 else {
-                  echo "Eroare la adăugarea rețetei de medicamente! Vă rugăm încercați din nou.";
-              
+                  echo "Eroare la adăugarea rețetei! Vă rugăm încercați din nou.";
+                
                   $mysqli->rollback();
                 }
               }
               else {
-                echo "Eroare la adăugarea rețetei! Vă rugăm încercați din nou.";
-              
-                $mysqli->rollback();
+                // no medicine, commit directly
+                $mysqli->commit();
+    
+                echo "Diagnosticul a fost adăugat cu succes!";
+                echo "<meta http-equiv=\"refresh\" content=\"3;url=/programari\">";
               }
             }
             else {
-              // no medicine, commit directly
-              $mysqli->commit();
-  
-              echo "Diagnosticul a fost adăugat cu succes!";
-              echo "<meta http-equiv=\"refresh\" content=\"3;url=/programari\">";
+              echo "Eroare la adăugarea diagnosticului!";
+              
+              $mysqli->rollback();
             }
           }
-          else {
-            echo "Eroare la adăugarea diagnosticului!";
+          catch (Exception $e) {
+            $error = $e->getMessage();
             
-            $mysqli->rollback();
+            if (strpos($error, 'Există deja un diagnostic pentru această programare.') !== false) {
+              echo "Eroare: " . $error;
+              $mysqli->rollback();
+            }
+            else if (strpos($error, 'Nu puteți insera un diagnostic pentru o programare din viitor.') !== false) {
+              echo "Eroare: " . $error;
+              $mysqli->rollback();
+            }
+            else {
+              echo "Eroare la adăugarea programării!";
+              $mysqli->rollback();
+            }
           }
 
           $stmt->close();

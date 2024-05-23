@@ -68,7 +68,7 @@
           echo "Nume farmacie: " . $row["nume"] . "<br>";
           echo "Stoc: " . $row["stoc"] . "<br>";
 
-          if (!strcmp($_SESSION["userType"], "medic")) {
+          if (isset($_SESSION["loggedin"]) && !strcmp($_SESSION["userType"], "medic")) {
           ?>
           <div class="mt-2">
             <button type="button" class="btn btn-outline-danger" onclick="confirmBox();">Sterge medicamentul</button>

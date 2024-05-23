@@ -215,3 +215,32 @@ BEGIN
 END//
 
 DELIMITER ;
+
+DELIMITER //
+
+CREATE TRIGGER before_insert_diagnostic
+BEFORE INSERT ON diagnostic
+FOR EACH ROW
+BEGIN
+    DECLARE appointment_datetime DATETIME;
+
+    -- Check if there is already a diagnosis for the same appointment
+    IF EXISTS (SELECT 1 FROM diagnostic WHERE idprogramare = NEW.idprogramare) THEN
+        SIGNAL SQLSTATE '45000'
+        SET MESSAGE_TEXT = 'Există deja un diagnostic pentru această programare.';
+    END IF;
+
+    -- Get the appointment date and time
+    SELECT CONCAT(data_programare, ' ', ora_programare) INTO appointment_datetime
+    FROM programare
+    WHERE idprogramare = NEW.idprogramare;
+
+    -- Check if the appointment date and time have passed
+    IF appointment_datetime > NOW() THEN
+        SIGNAL SQLSTATE '45000'
+        SET MESSAGE_TEXT = 'Nu puteți insera un diagnostic pentru o programare din viitor.';
+    END IF;
+END //
+
+DELIMITER ;
+
