@@ -58,7 +58,7 @@
             <!-- Modal content-->
             <div class="modal-content">
                 <div class="modal-header" style="padding:35px 50px;">
-                    <h2 class="modal-title w-100 ms-4"><i class="fa fa-lock"></i> Autentificare</h4>
+                    <h2 class="modal-title w-100 ms-4"><i class="fa fa-lock"></i> Autentificare</h2>
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
                 <div class="modal-body" style="padding:40px 50px;">
@@ -112,7 +112,7 @@
             <!-- Modal content-->
             <div class="modal-content">
                 <div class="modal-header" style="padding:35px 50px;">
-                    <h2 class="modal-title w-100 ms-4"><i class="fa fa-lock"></i> <?php echo ucfirst($_SESSION["userType"]); ?> </h4>
+                    <h2 class="modal-title w-100 ms-4"><i class="fa fa-lock"></i> <?php echo ucfirst($_SESSION["userType"]); ?> </h2>
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
                 <div class="modal-body" style="padding:40px 50px;">

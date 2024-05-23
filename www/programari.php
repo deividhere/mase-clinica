@@ -74,10 +74,10 @@
                 echo "Status: " . $row["status"] . "<br>";
                 ?>
                 <div class="mt-1 d-flex gap-2">
-                  <button type="button" class="btn btn-outline-success" onclick="">Adăugare diagnostic</button>
-                  <button type="button" class="btn btn-outline-success ms-2" onclick="confirmBoxConfirm();">Confirmă programarea</button>
-                  <button type="button" class="btn btn-outline-danger" onclick="confirmBoxCancel();">Anulează programarea</button>
-                  <button type="button" class="btn btn-danger ms-2" onclick="confirmBox();">Șterge programarea</button>
+                  <button type="button" class="btn btn-outline-success" onclick="confirmBoxDiag(<?php echo '\'' . $row['status'] . '\', \'' . $row['data_programare'] . '\', \'' . $row['ora_programare'] . '\', ' . $row['idprogramare']; ?>);">Adăugare diagnostic</button>
+                  <button type="button" class="btn btn-outline-success ms-2" onclick="confirmBoxConfirm(<?php echo '\'' . $row['data_programare'] . '\', \'' . $row['ora_programare'] . '\''; ?>);">Confirmă programarea</button>
+                  <button type="button" class="btn btn-outline-danger" onclick="confirmBoxCancel(<?php echo '\'' . $row['data_programare'] . '\', \'' . $row['ora_programare'] . '\''; ?>);">Anulează programarea</button>
+                  <button type="button" class="btn btn-danger ms-2" onclick="confirmBox(<?php echo '\'' . $row['data_programare'] . '\', \'' . $row['ora_programare'] . '\''; ?>);">Șterge programarea</button>
                 </div>
                 <?php
               }
@@ -161,7 +161,7 @@
                 echo "Status: " . $row["status"] . "<br>";
                 ?>
                 <div class="mt-2">
-                  <button type="button" class="btn btn-outline-danger" onclick="confirmBox();">Șterge programarea</button>
+                  <button type="button" class="btn btn-outline-danger" onclick="confirmBox(<?php echo '\'' . $row['data_programare'] . '\', \'' . $row['ora_programare'] . '\''; ?>);">Șterge programarea</button>
                 </div>
                 <?php
               }
@@ -227,6 +227,7 @@
           }
           else {
             echo "Tipul de utilizator nu este cunoscut!";
+            echo "<meta http-equiv=\"refresh\" content=\"3;url=/home\">";
           }
 
           $mysqli->close();
@@ -253,34 +254,79 @@
     }
     </script>
     <script type="text/javascript">
-    function confirmBox() {
+    function confirmBox(data, ora) {
       let text = "Sunteți sigur că vreți să ștergeți programarea?";
       if (confirm(text) == true) {
-        window.location = '/programari/sterge?id=<?php echo $_GET["id"] ?>';
-      } else {
+        const s = data + " " + ora;
+        const d = new Date(s);
+
+        if (Date.parse(d) - Date.parse(new Date())<0) {
+          alert("Programarea selectată este în trecut și nu mai poate fi ștearsă.");
+        }
+        else {
+          alert("pula");
+          return;
+          window.location = '/programari/sterge?id=<?php echo $_GET["id"] ?>';
+        }
+      } 
+      else {
         return;
       }
     }
     </script>
     <script type="text/javascript">
-    function confirmBoxCancel() {
+    function confirmBoxCancel(data, ora) {
       let text = "Sunteți sigur că vreți să anulați programarea?";
       if (confirm(text) == true) {
-        window.location = '/programari/editare?action=cancel&id=<?php echo $_GET["id"] ?>';
+        const s = data + " " + ora;
+        const d = new Date(s);
+
+        if (Date.parse(d) - Date.parse(new Date())<0) {
+          alert("Programarea selectată este în trecut și nu mai poate fi anulată.");
+        }
+        else {
+          window.location = '/programari/editare?action=cancel&id=<?php echo $_GET["id"] ?>';
+        }
       } else {
         return;
       }
     }
     </script>
     <script type="text/javascript">
-    function confirmBoxConfirm() {
+    function confirmBoxConfirm(data, ora) {
       let text = "Sunteți sigur că vreți să confirmați programarea?";
       if (confirm(text) == true) {
-        window.location = '/programari/editare?action=confirm&id=<?php echo $_GET["id"] ?>';
+        const s = data + " " + ora;
+        const d = new Date(s);
+
+        if (Date.parse(d) - Date.parse(new Date())<0) {
+          alert("Programarea selectată este în trecut și nu mai poate fi confirmată.");
+        }
+        else {
+          window.location = '/programari/editare?action=confirm&id=<?php echo $_GET["id"] ?>';
+        }
       } else {
         return;
       }
     }
+    </script>
+    <script>
+      function confirmBoxDiag(status, data, ora, id) {
+        if (status != "Confirmata") {
+          alert("Programarea trebuie să fie confirmată.");
+        }
+        else {
+          const s = data + " " + ora;
+          const d = new Date(s);
+
+          if (Date.parse(d) - Date.parse(new Date())<0) {
+            window.location = '/diagnostic/adauga?id=' + id;
+          }
+          else {
+            alert("Programarea trebuie să fie efectuată! Programarea selectată este în viitor.");
+          }
+        }
+      }
     </script>
   </body>
 </html>

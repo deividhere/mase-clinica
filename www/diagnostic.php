@@ -35,7 +35,17 @@
     <div class="container mt-4">
       <?php
         if (isset($_SESSION['loggedin']) && $_SESSION['loggedin'] == true) {
-          echo "Sunteți logat!";
+          echo "Sunteți logat! <br>";
+          if (!strcmp($_SESSION["userType"], "medic")) {
+            echo "medic";
+          }
+          else if (!strcmp($_SESSION["userType"], "pacient")) {
+            echo "pacient";
+          }
+          else {
+            echo "Tipul de utilizator nu este cunoscut!";
+            echo "<meta http-equiv=\"refresh\" content=\"3;url=/home\">";
+          }
         }
         else {
           echo "Nu sunteți logat!";

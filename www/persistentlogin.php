@@ -44,6 +44,7 @@
         $_SESSION["userType"] = $_COOKIE["userType"];
         $_SESSION["nume"] = $_COOKIE["nume"];
         $_SESSION["prenume"] = $_COOKIE["prenume"];
+        $_SESSION["userid"] = $_COOKIE["userId"];
       }
       else {
         // email is not good, delete cookies

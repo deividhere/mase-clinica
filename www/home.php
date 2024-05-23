@@ -36,8 +36,10 @@
     <div class="container mt-4">
       <div class="mb-2">
         <p class="mb-1 fw-bold">Studenți:</p>
-        <p>
+        <p class="mb-0">
           Andreea-Liliana Petre
+        </p>
+        <p class="mb-1">
           Trușcă Ionuț-David
         </p>
       </div>
