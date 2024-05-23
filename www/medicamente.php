@@ -67,11 +67,14 @@
           echo "Pret: " . $row["pret"] . "<br>";
           echo "Nume farmacie: " . $row["nume"] . "<br>";
           echo "Stoc: " . $row["stoc"] . "<br>";
+
+          if (!strcmp($_SESSION["userType"], "medic")) {
           ?>
           <div class="mt-2">
             <button type="button" class="btn btn-outline-danger" onclick="confirmBox();">Sterge medicamentul</button>
           </div>
           <?php
+          }
         }
         else {
           echo "Nu s-a găsit niciun medicament cu ID-ul specificat";

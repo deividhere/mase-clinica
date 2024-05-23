@@ -25,6 +25,8 @@
     if (session_id() == "")
       session_start();
     
+    $active = 9;
+
     $rootDir = realpath($_SERVER["DOCUMENT_ROOT"]);
     include "$rootDir/persistentlogin.php";
     
@@ -35,12 +37,262 @@
     <div class="container mt-4">
       <?php
         if (isset($_SESSION['loggedin']) && $_SESSION['loggedin'] == true) {
-          echo "Sunteți logat! <br>";
+          include "$rootDir/sqlinit.php";
+
+          // Create connection
+          $mysqli = new mysqli($servername, $username, $password, $database);
+
+          // Check connection
+          if ($mysqli->connect_error) {
+            die("Conectarea la baza de date a eșuat: " . $mysqli->connect_error);
+          }
+
           if (!strcmp($_SESSION["userType"], "medic")) {
-            echo "medic";
+            if (isset($_GET["id"])) {
+              ?>
+              <p class="text-center h2 fw-bold mb-2 mx-1 mx-md-4 mt-4">Vizualizare diagnostic</p>
+              <?php
+              $sql = "SELECT iddiagnostic, diagnostic, descriere, recomandari, data_programare, ora_programare, pc.nume nume, pc.prenume prenume FROM diagnostic d
+              INNER JOIN programare p ON d.idprogramare = p.idprogramare 
+              INNER JOIN medici m ON p.idmedic = m.idmedic
+              INNER JOIN pacienti pc ON p.idpacient = pc.idpacient
+              WHERE m.idmedic = ? AND iddiagnostic = ?";
+              $stmt = $mysqli->prepare($sql);
+
+              $stmt->bind_param("ii", $_SESSION["userid"], $_GET["id"]);
+              $stmt->execute();
+
+              $result = $stmt->get_result();
+
+              if ($result->num_rows > 0) {
+                $row = mysqli_fetch_assoc($result);
+
+                echo "Nume pacient: " . $row["nume"] . "<br>";
+                echo "Prenume pacient: " . $row["prenume"] . "<br>";
+                echo "Diagnostic: " . $row["diagnostic"] . "<br>";
+                echo "Descriere: " . $row["descriere"] . "<br>";
+                echo "Recomandări: " . $row["recomandari"] . "<br>";
+                echo "Dată programare: " . $row["data_programare"] . "<br>";
+                echo "Oră programare: " . $row["ora_programare"] . "<br>";
+
+                $iddiagnostic = $row["iddiagnostic"];
+
+                $stmt->close();
+
+                $sql = "SELECT l.idmedicament idm, denumire, cantitate FROM reteta r
+                INNER JOIN lista l ON r.idreteta = l.idreteta 
+                INNER JOIN medicamente m ON l.idmedicament = m.idmedicament
+                WHERE r.iddiagnostic = ?";
+                $stmt = $mysqli->prepare($sql);
+
+                $stmt->bind_param("i", $iddiagnostic);
+                $stmt->execute();
+
+                $result = $stmt->get_result();
+
+                if ($result->num_rows > 0) {
+                  echo "Rețetă: <br>";
+                  $i = 1;
+                  ?>
+                  <table class="table table-hover">
+                    <thead class="table-light">
+                      <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Denumire</th>
+                        <th scope="col">Cantitate</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <?php
+                        while($row = mysqli_fetch_assoc($result)) {
+                          echo "<tr class=\"clickable\" onclick=\"showDetailsMed(". $row["idm"] .")\">";
+                          echo "<th scope=\"row\">$i</th>";
+                          echo "<td>" . $row["denumire"] . "</td>";
+                          echo "<td>" . $row["cantitate"] . "</td>";
+                          echo "</tr>";
+                          $i++;
+                        }
+                      ?>
+                    </tbody>
+                  </table>
+                  <?php
+                }
+                else {
+                  echo "Diagnosticul nu are nicio rețetă.";
+                }
+              }
+              else {
+                echo "Nu s-a găsit niciun diagnostic cu ID-ul specificat.";
+              }
+            }
+            else {
+              $sql = "SELECT iddiagnostic, diagnostic, descriere, recomandari FROM diagnostic d
+              INNER JOIN programare p ON d.idprogramare = p.idprogramare 
+              WHERE p.idmedic = ?";
+              $stmt = $mysqli->prepare($sql);
+              
+              $stmt->bind_param("i", $_SESSION["userid"]);
+              $stmt->execute();
+      
+              $result = $stmt->get_result();
+      
+              if ($result->num_rows > 0) {
+                $i = 1;
+                ?>
+                <table class="table table-hover">
+                  <thead class="table-light">
+                    <tr>
+                      <th scope="col">#</th>
+                      <th scope="col">Diagnostic</th>
+                      <th scope="col">Descriere</th>
+                      <th scope="col">Recomandări</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <?php
+                      while($row = mysqli_fetch_assoc($result)) {
+                        echo "<tr class=\"clickable\" onclick=\"showDetails(". $row["iddiagnostic"] .")\">";
+                        echo "<th scope=\"row\">$i</th>";
+                        echo "<td>" . substr($row["diagnostic"], 0, 30) . "</td>";
+                        echo "<td>" . substr($row["descriere"], 0, 30) . "</td>";
+                        echo "<td>" . substr($row["recomandari"], 0, 30) . "</td>";
+                        echo "</tr>";
+                        $i++;
+                      }
+                    ?>
+                  </tbody>
+                </table>
+                <?php
+              }
+              else {
+                echo "Nu a fost găsit niciun diagnostic.";
+              }
+              ?>
+              <?php
+            }
           }
           else if (!strcmp($_SESSION["userType"], "pacient")) {
-            echo "pacient";
+            if (isset($_GET["id"])) {
+              ?>
+              <p class="text-center h2 fw-bold mb-2 mx-1 mx-md-4 mt-4">Vizualizare diagnostic</p>
+              <?php
+              $sql = "SELECT iddiagnostic, diagnostic, descriere, recomandari, data_programare, ora_programare, nume, prenume FROM diagnostic d
+              INNER JOIN programare p ON d.idprogramare = p.idprogramare 
+              INNER JOIN medici m ON p.idmedic = m.idmedic
+              WHERE p.idpacient = ? AND iddiagnostic = ?";
+              $stmt = $mysqli->prepare($sql);
+
+              $stmt->bind_param("ii", $_SESSION["userid"], $_GET["id"]);
+              $stmt->execute();
+
+              $result = $stmt->get_result();
+
+              if ($result->num_rows > 0) {
+                $row = mysqli_fetch_assoc($result);
+
+                echo "Nume medic: " . $row["nume"] . "<br>";
+                echo "Prenume medic: " . $row["prenume"] . "<br>";
+                echo "Diagnostic: " . $row["diagnostic"] . "<br>";
+                echo "Descriere: " . $row["descriere"] . "<br>";
+                echo "Recomandări: " . $row["recomandari"] . "<br>";
+                echo "Dată programare: " . $row["data_programare"] . "<br>";
+                echo "Oră programare: " . $row["ora_programare"] . "<br>";
+
+                $iddiagnostic = $row["iddiagnostic"];
+
+                $stmt->close();
+
+                $sql = "SELECT l.idmedicament idm, denumire, cantitate FROM reteta r
+                INNER JOIN lista l ON r.idreteta = l.idreteta 
+                INNER JOIN medicamente m ON l.idmedicament = m.idmedicament
+                WHERE r.iddiagnostic = ?";
+                $stmt = $mysqli->prepare($sql);
+
+                $stmt->bind_param("i", $iddiagnostic);
+                $stmt->execute();
+
+                $result = $stmt->get_result();
+
+                if ($result->num_rows > 0) {
+                  echo "Rețetă: <br>";
+                  $i = 1;
+                  ?>
+                  <table class="table table-hover">
+                    <thead class="table-light">
+                      <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Denumire</th>
+                        <th scope="col">Cantitate</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <?php
+                        while($row = mysqli_fetch_assoc($result)) {
+                          echo "<tr class=\"clickable\" onclick=\"showDetailsMed(". $row["idm"] .")\">";
+                          echo "<th scope=\"row\">$i</th>";
+                          echo "<td>" . $row["denumire"] . "</td>";
+                          echo "<td>" . $row["cantitate"] . "</td>";
+                          echo "</tr>";
+                          $i++;
+                        }
+                      ?>
+                    </tbody>
+                  </table>
+                  <?php
+                }
+                else {
+                  echo "Diagnosticul nu are nicio rețetă.";
+                }
+              }
+              else {
+                echo "Nu s-a găsit niciun diagnostic cu ID-ul specificat.";
+              }
+            }
+            else {
+              $sql = "SELECT iddiagnostic, diagnostic, descriere, recomandari FROM diagnostic d
+              INNER JOIN programare p ON d.idprogramare = p.idprogramare 
+              WHERE p.idpacient = ?";
+              $stmt = $mysqli->prepare($sql);
+              
+              $stmt->bind_param("i", $_SESSION["userid"]);
+              $stmt->execute();
+      
+              $result = $stmt->get_result();
+      
+              if ($result->num_rows > 0) {
+                $i = 1;
+                ?>
+                <table class="table table-hover">
+                  <thead class="table-light">
+                    <tr>
+                      <th scope="col">#</th>
+                      <th scope="col">Diagnostic</th>
+                      <th scope="col">Descriere</th>
+                      <th scope="col">Recomandări</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <?php
+                      while($row = mysqli_fetch_assoc($result)) {
+                        echo "<tr class=\"clickable\" onclick=\"showDetails(". $row["iddiagnostic"] .")\">";
+                        echo "<th scope=\"row\">$i</th>";
+                        echo "<td>" . substr($row["diagnostic"], 0, 30) . "</td>";
+                        echo "<td>" . substr($row["descriere"], 0, 30) . "</td>";
+                        echo "<td>" . substr($row["recomandari"], 0, 30) . "</td>";
+                        echo "</tr>";
+                        $i++;
+                      }
+                    ?>
+                  </tbody>
+                </table>
+                <?php
+              }
+              else {
+                echo "Nu a fost găsit niciun diagnostic.";
+              }
+              ?>
+              <?php
+            }
           }
           else {
             echo "Tipul de utilizator nu este cunoscut!";
@@ -54,6 +306,18 @@
       ?>
     </div>
     
+    <script type="text/javascript">
+    function showDetails(id)
+      {
+        window.location = '/diagnostic?id='+id;
+      }
+    </script>
+    <script type="text/javascript">
+    function showDetailsMed(id)
+      {
+        window.location = '/medicamente?id='+id;
+      }
+    </script>
     <script src="/script/script.js"></script>
     <!-- Cookie Consent by FreePrivacyPolicy.com https://www.FreePrivacyPolicy.com -->
     <script type="text/javascript" src="//www.freeprivacypolicy.com/public/cookie-consent/4.1.0/cookie-consent.js" charset="UTF-8"></script>

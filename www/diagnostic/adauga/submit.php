@@ -72,7 +72,7 @@
           VALUES (?, ?, ?, ?)";
 
           $stmt = $mysqli->prepare($sql);
-          $stmt->bind_param("isss", $_POST["idprogramare"], $_SESSION["diagnostic"], $_POST["descriere"], $_POST["recomandari"]);
+          $stmt->bind_param("isss", $_POST["idprogramare"], $_POST["diagnostic"], $_POST["descriere"], $_POST["recomandari"]);
           
           $stmt->execute();
           
