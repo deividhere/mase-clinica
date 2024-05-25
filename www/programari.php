@@ -264,8 +264,6 @@
           alert("Programarea selectată este în trecut și nu mai poate fi ștearsă.");
         }
         else {
-          alert("pula");
-          return;
           window.location = '/programari/sterge?id=<?php echo $_GET["id"] ?>';
         }
       } 
